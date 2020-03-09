@@ -7,10 +7,10 @@ import {Card} from 'react-native-shadow-cards';
 
 const Tab = createBottomTabNavigator();
 
-function HomeScreen() {
+function SearchScreen() {
   return (
     <View>
-      <Text>Home</Text>
+      <Text>Search</Text>
     </View>
   );
 };
@@ -55,7 +55,7 @@ class App extends Component {
         <FlatList
           data={this.state.chitsListData}
           renderItem={({item}) => 
-          <Card style={{padding: 10, margin: 10}}>
+          <Card style={{padding: 10, margin: 10, alignSelf:'center'}}>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <Image style={{width: 50, height: 50, borderRadius: 50}}
           source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+item.user.user_id+'/photo'}}></Image>
@@ -79,7 +79,7 @@ export default function Navigation() {
     <Tab.Navigator>
       
       <Tab.Screen name="Home" component={App}></Tab.Screen>
-      <Tab.Screen name="Chittr" component={HomeScreen}></Tab.Screen>
+      <Tab.Screen name="Search" component={SearchScreen}></Tab.Screen>
       <Tab.Screen name="Login" component={LoginScreen}></Tab.Screen>
     </Tab.Navigator>
   </NavigationContainer>
