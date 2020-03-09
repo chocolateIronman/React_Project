@@ -62,16 +62,21 @@ export class RegisterScreen extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                username: this.state.username,
-                loginpass: this.state.loginpass
+                email: this.state.username,
+                password: this.state.loginpass
             })
         })
-        .then((response)=>{
-            alert("Logged in!");
-        })
-        .catch((error)=>{
+        .then((response) => response.json())
+        .then((responseJson) => {
+            console.log(JSON.stringify({
+                email: this.state.username,
+               password: this.state.loginpass
+            }))
+            console.log(responseJson.token);
+            alert("Logged in!"+responseJson.token);
+        }).catch((error) => {
             console.log(error);
-        })
+         });
     }
      
       
