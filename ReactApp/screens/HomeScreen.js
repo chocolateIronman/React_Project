@@ -33,7 +33,7 @@ export class HomeScreen extends Component {
     render() {
       return (
         <View>
-          <Text style={{textAlign: 'center', color: '#8ceded', fontSize:35}}>Chittr</Text>
+          <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
           <FlatList
             data={this.state.chitsListData}
             renderItem={({item}) => 
