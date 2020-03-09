@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Button, FlatList, Image} from 'react-native';
+import {View, Text, Button, FlatList, Image, ActivityIndicator} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -31,6 +31,14 @@ export class HomeScreen extends Component {
     }
   
     render() {
+      if(this.state.isLoading){
+        return(
+        <View>
+        <ActivityIndicator/>
+        </View>
+        )
+        }
+       
       return (
         <View>
           <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
