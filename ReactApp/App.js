@@ -1,44 +1,86 @@
 import React, {Component} from 'react';
-import {View, Text, Button, FlatList} from 'react-native';
+import {View, Text, Button, FlatList, Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Card} from 'react-native-shadow-cards';
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const HomeScreen = ({navigation}) => {
-  navigation.setOptions({
-    headerRight: () => (
-      <Button title="Login" onPress={() => navigation.navigate('Login')}></Button>
-    )
-  })
- 
-   
+function HomeScreen() {
   return (
     <View>
-      <FlatList
-       
-      />
-
+      <Text>Home</Text>
     </View>
   );
-
-
-  
 };
 
+function LoginScreen() {
+  return (
+    <View>
+      <Text>Login:</Text>
+    </View>
+  );
+};
 
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      chitsListData: []
+    }
+  }
 
-const LoginScreen = (props) => (
-  <View>
-    <Text>Login:</Text>
-  </View>
-)
+  getData() {
+    return fetch('http://10.0.2.2:3333/api/v0.0.5/chits', {
+      headers: {
+        'Content-type': 'application/json',
+        //'X-Authorization' : KEY
+      }
+    }).then((response) => response.json()).then((responseJson) => {
+      this.setState({isLoading: false, chitsListData: responseJson});
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+  componentDidMount() {
+    this.getData();
+  }
 
-export default function App() {
+  render() {
+    return (
+      <View>
+        <Text style={{textAlign: 'center', color: '#8ceded', fontSize:35}}>Chittr</Text>
+        <FlatList
+          data={this.state.chitsListData}
+          renderItem={({item}) => 
+          <Card style={{padding: 10, margin: 10}}>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <Image style={{width: 50, height: 50, borderRadius: 50}}
+          source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+item.user.user_id+'/photo'}}></Image>
+           
+            <View style={{marginTop:15, marginLeft:10}}>
+              <Text style={{fontWeight: 'bold'}}>{item.user.given_name} {item.user.family_name}</Text>
+              <Text style={{marginTop:5,maxWidth:270}}>{item.chit_content}</Text>
+            </View>
+            </View>
+          </Card>}
+          keyExtractor={({
+          id
+        }, index) => id}/>
+      </View>
+    );
+  }
+}
+
+export default function Navigation() {
   return <NavigationContainer>
-    <Stack.Navigator>
-      <Stack.Screen name="Chittr" component={HomeScreen}></Stack.Screen>
-      <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
-    </Stack.Navigator>
+    <Tab.Navigator>
+      
+      <Tab.Screen name="Home" component={App}></Tab.Screen>
+      <Tab.Screen name="Chittr" component={HomeScreen}></Tab.Screen>
+      <Tab.Screen name="Login" component={LoginScreen}></Tab.Screen>
+    </Tab.Navigator>
   </NavigationContainer>
 }
