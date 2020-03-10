@@ -34,6 +34,7 @@ export class HomeScreen extends Component {
 
     refreshUpdate= function(){
       if(global.key!=null && global.key!=undefined){
+        clearInterval(this.interval);
         //console.log("Key: "+global.key);
         this.setState({
           requestHeaders:{
@@ -44,7 +45,7 @@ export class HomeScreen extends Component {
         });
         this.getData();
         console.log("H: ",this.state.requestHeaders);
-        clearInterval(this.interval);
+        
       }
     }
 
