@@ -1,17 +1,12 @@
 import React, {Component} from 'react';
-import {
-    View,
-    Text,
-    Button,
-    FlatList,
-    Image,
-    TextInput
-} from 'react-native';
+import { View,Text,Button,FlatList,Image,TextInput,AsyncStorage} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-//import console = require('console');
 
+
+
+const ACCESS_TOKEN ='access_token';
 
 export class RegisterScreen extends Component {
    
@@ -26,9 +21,34 @@ export class RegisterScreen extends Component {
             password:'',
             loginpass:'',
             username:'',
-            token: ''
+            
         };
       }
+
+    async storeToken(accessToken){
+        try{
+            await AsyncStorage.setItem(ACCESS_TOKEN, accessToken);
+            this.getToken();
+        }catch(error){
+            console.log("Something went wrong!")
+        }
+    }
+    async getToken(){
+        try{
+            let token = await AsyncStorage.getItem(ACCESS_TOKEN);
+            console.log("Token is:" + token);
+        }catch(error){
+            console.log("Something went wrong!")
+        }
+    }
+    async removeToken(){
+        try{
+            await AsyncStorage.removeItem(ACCESS_TOKEN);
+            this.getToken();
+        }catch(error){
+            console.log("Something went wrong!")
+        }
+    }
       
     toggleLogin(){
         console.log("toggle",this.state.showLogin);
@@ -57,7 +77,7 @@ export class RegisterScreen extends Component {
         });
     }
 
-    logIn(){
+    async logIn(){
         return fetch("http://10.0.2.2:3333/api/v0.0.5/login",{
             method: 'POST',
             headers:{
@@ -70,14 +90,18 @@ export class RegisterScreen extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            console.log(JSON.stringify({
-                email: this.state.username,
-               password: this.state.loginpass
-            }))
-            console.log(responseJson.token);
-           this.state.token=responseJson.token;
-            alert("Logged in!"+this.state.token);
-        }).catch((error) => {
+            //console.log(responseJson.token);
+            let accessToken = responseJson.token;
+            this.storeToken(accessToken);
+            alert("Logged in!"+accessToken);
+            global.key=accessToken;
+            console.log("global"+global.key);
+            this.props.navigation.navigate('Home');
+
+            
+        })
+        .catch((error) => {
+            this.removeToken();
             console.log(error);
             alert("Invalid email or password!");
          });
@@ -88,7 +112,7 @@ export class RegisterScreen extends Component {
         if(this.state.showLogin){
             return (
            
-           
+                
                 <View style={{flex:1,flexDirection: 'column', margin:20}}>
                     <View style={{paddingBottom:20}}>
                         <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
@@ -145,6 +169,8 @@ export class RegisterScreen extends Component {
                         <Button title="Sign Up" onPress={()=>{this.toggleLogin()}}></Button>
                         
                     </View>
+
+                   
                 </View>
             )
 

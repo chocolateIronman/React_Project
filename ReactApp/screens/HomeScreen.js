@@ -1,36 +1,90 @@
 import React, {Component} from 'react';
-import {View, Text, Button, FlatList, Image, ActivityIndicator} from 'react-native';
+import {View, Text, Button, FlatList, Image, ActivityIndicator, AsyncStorage} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Card} from 'react-native-shadow-cards';
 
+
 export class HomeScreen extends Component {
     constructor(props) {
       super(props);
+      
       this.state = {
         isLoading: true,
-        chitsListData: []
+        chitsListData: [],
+        requestHeaders: {
+          'Content-Type':'application/json'
+        },
+        time:0
       }
+      
     }
-  
+    
     getData() {
       return fetch('http://10.0.2.2:3333/api/v0.0.5/chits', {
-        headers: {
-          'Content-type': 'application/json',
-          //'X-Authorization' : KEY
-        }
+        headers: this.state.requestHeaders
+        
       }).then((response) => response.json()).then((responseJson) => {
         this.setState({isLoading: false, chitsListData: responseJson});
       }).catch((error) => {
         console.log(error);
       });
     }
+
+    refreshUpdate= function(){
+      if(global.key!=null && global.key!=undefined){
+        //console.log("Key: "+global.key);
+        this.setState({
+          requestHeaders:{
+            'Content-Type':'application/json',
+            'X-Authorization':global.key
+          },
+          time: this.state.time+1
+        });
+        this.getData();
+        console.log("H: ",this.state.requestHeaders);
+        clearInterval(this.interval);
+      }
+    }
+
     componentDidMount() {
+      if(global.key==null||global.key==undefined) {
+        
+        this.getToken().then(()=>{
+          if(global.key==null||global.key==undefined) {
+            this.interval = setInterval(() => this.refreshUpdate(), 5000);
+          }
+        })
+
+          
+        
+      }
+      if(global.key==null||global.key==undefined) {
+        this.interval = setInterval(() => this.refreshUpdate(), 5000);
+      }
+      
+     
       this.getData();
     }
+
+    async getToken(){
+      try{
+          let token = await AsyncStorage.getItem('access_token');
+          console.log("Token222 is:" + token);
+          global.key=token;
+          console.log("global token is:" + global.key);
+          console.log(global.key);
+          this.refreshUpdate()
+      }catch(error){
+          console.log("Something went wrong!")
+      }
+  }
+
+   
   
     render() {
+      
       if(this.state.isLoading){
         return(
         <View>
@@ -38,9 +92,10 @@ export class HomeScreen extends Component {
         </View>
         )
         }
-       
+      
       return (
         <View>
+        
           <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
           <FlatList
             data={this.state.chitsListData}

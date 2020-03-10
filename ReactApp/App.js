@@ -8,6 +8,7 @@ import {Card} from 'react-native-shadow-cards';
 import {HomeScreen} from './screens/HomeScreen';
 import {RegisterScreen} from "./screens/RegisterScreen";
 
+
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
