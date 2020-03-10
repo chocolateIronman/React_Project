@@ -15,6 +15,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 export class RegisterScreen extends Component {
    
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -24,7 +25,8 @@ export class RegisterScreen extends Component {
             email:'',
             password:'',
             loginpass:'',
-            username:''        
+            username:'',
+            token: ''
         };
       }
       
@@ -73,9 +75,11 @@ export class RegisterScreen extends Component {
                password: this.state.loginpass
             }))
             console.log(responseJson.token);
-            alert("Logged in!"+responseJson.token);
+           this.state.token=responseJson.token;
+            alert("Logged in!"+this.state.token);
         }).catch((error) => {
             console.log(error);
+            alert("Invalid email or password!");
          });
     }
      
