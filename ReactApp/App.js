@@ -26,7 +26,7 @@ function SearchScreen() {
 
 const TabScreen = () =>{
   return(
-  <Tab.Navigator>
+  <Tab.Navigator initialRouteName="Home">
       <Tab.Screen name="Home" component={HomeScreen}></Tab.Screen>
       <Tab.Screen name="Search" component={SearchScreen}></Tab.Screen>
     </Tab.Navigator>
@@ -36,10 +36,10 @@ const TabScreen = () =>{
 
 export default function Navigation(){
   return(
-  <NavigationContainer>
+  <NavigationContainer initialRouteName="Home">
       <Drawer.Navigator>
        <Drawer.Screen name="Home" component={TabScreen} />
-       <Drawer.Screen name="Login" component={RegisterScreen}/>
+       <Drawer.Screen name="Login/Logout" component={RegisterScreen}/>
       </Drawer.Navigator>
     </NavigationContainer>
   )

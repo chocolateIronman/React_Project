@@ -34,7 +34,7 @@ export class HomeScreen extends Component {
 
     refreshUpdate= function(){
       if(global.key!=null && global.key!=undefined){
-        clearInterval(this.interval);
+        //clearInterval(this.interval);
         //console.log("Key: "+global.key);
         this.setState({
           requestHeaders:{
@@ -48,15 +48,18 @@ export class HomeScreen extends Component {
         
       }
     }
+    
 
     componentDidMount() {
       if(global.key==null||global.key==undefined) {
         
         this.getToken().then(()=>{
           if(global.key==null||global.key==undefined) {
-            this.interval = setInterval(() => this.refreshUpdate(), 5000);
+            //this.interval = setInterval(() => this.refreshUpdate(), 5000);
+            this.refreshUpdate();
           }
-        })
+        }).then( 
+        )
 
           
         
@@ -66,9 +69,10 @@ export class HomeScreen extends Component {
       }
       
      
-      this.getData();
+      this.getData(); 
     }
-
+   
+   
     async getToken(){
       try{
           let token = await AsyncStorage.getItem('access_token');

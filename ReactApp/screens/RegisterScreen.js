@@ -15,6 +15,7 @@ export class RegisterScreen extends Component {
         super(props);
         this.state = {
             showLogin:true,
+            showLogout:false,
             given_name:'',
             family_name:'',
             email:'',
@@ -54,6 +55,47 @@ export class RegisterScreen extends Component {
         console.log("toggle",this.state.showLogin);
         this.setState({showLogin:!this.state.showLogin});
     }
+    
+    refreshUpdate = function() {
+        if(global.key!=null && global.key!=undefined){
+            this.setState({showLogout:true});
+        }
+    }
+
+    componentDidMount(){
+        if(global.key==null || global.key==undefined) {
+            this.getToken().then(()=>{
+                if(global.key==null||global.key==undefined){
+                    this.refreshUpdate();
+                }
+            })
+        }
+        if(global.key==null||global.key==undefined){
+            this.refreshUpdate();
+        }
+        this.refreshUpdate();
+    }
+
+    async logOut(){
+        return fetch("http://10.0.2.2:3333/api/v0.0.5/logout",{
+            method: 'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'X-Authorization':global.key
+            }
+        })
+        .then((response)=>{
+            alert('Logged out!');
+            this.setState({showLogout:!this.state.showLogout});
+            global.key=null;
+            this.removeToken();
+            this.props.navigation.navigate('Home');
+            
+        })
+        .catch((error)=>{
+            console.error(error);
+        })
+    }
 
     signUp(){
         return fetch("http://10.0.2.2:3333/api/v0.0.5/user",{
@@ -77,6 +119,7 @@ export class RegisterScreen extends Component {
         });
     }
 
+    
     async logIn(){
         return fetch("http://10.0.2.2:3333/api/v0.0.5/login",{
             method: 'POST',
@@ -96,8 +139,9 @@ export class RegisterScreen extends Component {
             alert("Logged in!"+accessToken);
             global.key=accessToken;
             console.log("global"+global.key);
+            this.setState({showLogout:!this.state.showLogout});
             this.props.navigation.navigate('Home');
-
+            
             
         })
         .catch((error) => {
@@ -109,6 +153,21 @@ export class RegisterScreen extends Component {
      
       
     render() {
+         if(this.state.showLogout)
+        {
+            return(
+                <View>
+                    <View style={{paddingBottom:20}}>
+                        <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
+                        <Text style={{textAlign: 'center',  fontSize:25}}>Log out</Text>
+                    </View>
+                    <View style={{margin:10}}>
+                        <Button title="Log out" onPress={()=>this.logOut()}></Button>
+                    </View>
+                </View>
+            )
+        }
+        else{ 
         if(this.state.showLogin){
             return (
            
@@ -177,7 +236,8 @@ export class RegisterScreen extends Component {
             
         }
 
-        
+    }
         
     }
+
 }
