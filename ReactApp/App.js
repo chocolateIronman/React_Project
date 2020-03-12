@@ -7,18 +7,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 import {Card} from 'react-native-shadow-cards';
 import {HomeScreen} from './screens/HomeScreen';
 import {RegisterScreen} from "./screens/RegisterScreen";
-
+import {SearchScreen} from "./screens/SearchScreen";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-function SearchScreen() {
-  return (
-    <View>
-      <Text>Search</Text>
-    </View>
-  );
-};
+
 
 
 
