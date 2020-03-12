@@ -40,9 +40,15 @@ export class SearchScreen extends Component {
             console.log(error);
         });
     }
-    getID(){
-        alert("ID is: "+id);
+    getID(item){
+        global.userid=item;
+        this.props.navigation.jumpTo('Profile', {
+            userid: item});
+            
     }
+
+    
+
 
     render() {
         return (
@@ -62,7 +68,7 @@ export class SearchScreen extends Component {
 
                 <View>
                     <FlatList data={this.state.userListData} 
-                        renderItem={({item}) => <TouchableOpacity onPress={() => this.getID()}><Card style={{padding: 10,margin: 10,alignSelf: 'center'}} >
+                        renderItem={({item}) => <TouchableOpacity onPress={() => this.getID(item.user_id)}><Card style={{padding: 10,margin: 10,alignSelf: 'center'}} >
                             <View style={{flex: 1,flexDirection: 'row'}} >
                                 <Image style={{width: 50, height: 50, borderRadius: 50}} 
                                     source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+item.user_id+'/photo'}}></Image>

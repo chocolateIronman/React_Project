@@ -8,6 +8,7 @@ import {Card} from 'react-native-shadow-cards';
 import {HomeScreen} from './screens/HomeScreen';
 import {RegisterScreen} from "./screens/RegisterScreen";
 import {SearchScreen} from "./screens/SearchScreen";
+import {UserScreen} from './screens/UserScreen';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -34,6 +35,7 @@ export default function Navigation(){
       <Drawer.Navigator>
        <Drawer.Screen name="Home" component={TabScreen} />
        <Drawer.Screen name="Login/Logout" component={RegisterScreen}/>
+       <Drawer.Screen name='Profile' component={UserScreen}/>
       </Drawer.Navigator>
     </NavigationContainer>
   )
