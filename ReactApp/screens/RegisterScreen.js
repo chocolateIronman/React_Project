@@ -153,12 +153,17 @@ export class RegisterScreen extends Component {
         .then((responseJson) => {
             //console.log(responseJson.token);
             let accessToken = responseJson.token;
-            this.storeToken(accessToken);
-            alert("Logged in!"+accessToken);
-            global.key=accessToken;
-            console.log("global"+global.key);
-            this.setState({showLogout:!this.state.showLogout});
-            this.props.navigation.navigate('Home');
+            this.storeToken(accessToken).then(()=>{
+                alert("Logged in!"+accessToken);
+                global.key=accessToken;
+                console.log("global"+global.key);
+                //this.setState({showLogout:!this.state.showLogout});
+                //this.props.navigation.navigate('Home');
+            }).then(()=>{
+                this.setState({showLogout:!this.state.showLogout});
+                this.props.navigation.navigate('Home');
+            })
+           
             
             
         })

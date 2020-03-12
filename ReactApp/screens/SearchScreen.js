@@ -36,17 +36,18 @@ export class SearchScreen extends Component {
 
         }).then((response) => response.json()).then((responseJson) => {
             this.setState({userListData: responseJson});
-        }).catch((error) => {
+        })
+        .catch((error) => {
             console.log(error);
         });
     }
+    
     getID(item){
         global.userid=item;
         this.props.navigation.jumpTo('Profile', {
             userid: item});
             
     }
-
     
 
 
