@@ -97,6 +97,23 @@ export class RegisterScreen extends Component {
         })
     }
 
+    checkIfEmpty(){
+        if(this.state.given_name==null || this.state.given_name==undefined || this.state.given_name==''){
+            alert("Invalid name"); 
+        }
+        else if(this.state.family_name==null || this.state.family_name==undefined || this.state.family_name==''){
+            alert("Inavlid surname"); 
+        }
+        else if(this.state.email==null || this.state.email==undefined || this.state.email==''){
+            alert("Invalid email"); 
+        } 
+        else if(this.state.password==null || this.state.password==undefined || this.state.password==''){
+            alert("Invalid password"); 
+        }   
+        else{this.signUp()}
+    }
+    
+
     signUp(){
         return fetch("http://10.0.2.2:3333/api/v0.0.5/user",{
             method: 'POST',
@@ -116,6 +133,7 @@ export class RegisterScreen extends Component {
         })
         .catch((error)=>{
             console.error(error);
+            alert("Invalid details! Please check in that everything is filled in correctly!");
         });
     }
 
@@ -194,7 +212,7 @@ export class RegisterScreen extends Component {
                         <TextInput secureTextEntry={true} placeholder="Password" style={{borderWidth:1, borderRadius:50, borderColor: 'grey'}}  onChangeText={(text) => this.setState({password: text})}></TextInput>
                     </View>
                     <View style={{margin:10}}>
-                        <Button title="Sign Up" onPress={()=>this.signUp()}></Button>
+                        <Button title="Sign Up" onPress={()=>this.checkIfEmpty()}></Button>
                     </View>
                     <View style={{margin:10}}>
                         <Text style={{textAlign:'center'}}>Already have an account?</Text>
