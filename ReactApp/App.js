@@ -9,6 +9,7 @@ import {HomeScreen} from './screens/HomeScreen';
 import {RegisterScreen} from "./screens/RegisterScreen";
 import {SearchScreen} from "./screens/SearchScreen";
 import {UserScreen} from './screens/UserScreen';
+import {PostScreen} from './screens/PostScreen';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -24,6 +25,7 @@ const TabScreen = () =>{
   <Tab.Navigator initialRouteName="Home">
       <Tab.Screen name="Home" component={HomeScreen}></Tab.Screen>
       <Tab.Screen name="Search" component={SearchScreen}></Tab.Screen>
+      <Tab.Screen name="Post Chit" component={PostScreen}></Tab.Screen>
     </Tab.Navigator>
   )
 }
@@ -35,7 +37,7 @@ export default function Navigation(){
       <Drawer.Navigator>
        <Drawer.Screen name="Home" component={TabScreen} />
        <Drawer.Screen name="Login/Logout" component={RegisterScreen}/>
-       <Drawer.Screen name='Profile' component={UserScreen}/>
+       <Drawer.Screen name='Profile' component={UserScreen} initialParams={{userid:0}}/>
       </Drawer.Navigator>
     </NavigationContainer>
   )

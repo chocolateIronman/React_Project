@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import { View,Text,Button,FlatList,Image,TextInput,AsyncStorage} from 'react-native';
+import { View,Text,Button,FlatList,Image,TextInput} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
-
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-community/async-storage';;
 
 const ACCESS_TOKEN ='access_token';
 
@@ -21,12 +21,11 @@ export class RegisterScreen extends Component {
             email:'',
             password:'',
             loginpass:'',
-            username:'',
-            
+            username:''
         };
       }
 
-    async storeToken(accessToken){
+    /* async storeToken(accessToken){
         try{
             await AsyncStorage.setItem(ACCESS_TOKEN, accessToken);
             this.getToken();
@@ -49,28 +48,79 @@ export class RegisterScreen extends Component {
         }catch(error){
             console.log("Something went wrong!")
         }
+    } */
+    /* async storeIDToken(idToken){
+        try{
+            await AsyncStorage.setItem('id_token', idToken);
+            this.getIDToken();
+        }catch(error){
+            console.log("Something went wrong saving!")
+        }
     }
-      
+    async getIDToken(){
+        try{
+            let myID = await AsyncStorage.getItem('id_token').then(global.user_id=null);
+            console.log("ID is:" + myID);
+        }catch(error){
+            console.log("Something went wrong retrieving!")
+        }
+    }
+    async removeIDToken(){
+        try{
+            await AsyncStorage.removeItem('id_token');
+            this.getIDToken();
+        }catch(error){
+            console.log("Something went wrong removing!")
+        }
+    } */
+    
+    async saveData(obj){
+        try{
+            await AsyncStorage.setItem('user', JSON.stringify(obj));
+            this.displayData();
+        }catch(error){
+            console.log("Error1: "+error)
+        }
+    }
+    async displayData() {
+        try {
+          let user = await AsyncStorage.getItem('user');
+          let parsed = JSON.parse(user);
+          console.log("Parsed: "+parsed,"id: ",parsed.id,"token: ",parsed.token)
+        } catch(e) {
+          console.log("Error2: "+e);
+        }
+      }
+
+    async removeData(){
+        try{
+            await AsyncStorage.removeItem('user');
+            this.displayData();
+        }catch(error){
+            console.log("Error3: "+error);
+        }
+    }
+
     toggleLogin(){
         console.log("toggle",this.state.showLogin);
         this.setState({showLogin:!this.state.showLogin});
     }
     
     refreshUpdate = function() {
-        if(global.key!=null && global.key!=undefined){
+        if((global.key!=null && global.key!=undefined)){
             this.setState({showLogout:true});
         }
     }
 
     componentDidMount(){
-        if(global.key==null || global.key==undefined) {
-            this.getToken().then(()=>{
-                if(global.key==null||global.key==undefined){
+        if((global.key==null || global.key==undefined) &&( global.user_id==null || global.user_id==undefined)) {
+            this.displayData().then(()=>{
+                if((global.key==null||global.key==undefined)&&(global.user_id==null||global.user_id==undefined)){
                     this.refreshUpdate();
                 }
             })
         }
-        if(global.key==null||global.key==undefined){
+        if((global.key==null || global.key==undefined) &&( global.user_id==null || global.user_id==undefined)){
             this.refreshUpdate();
         }
         this.refreshUpdate();
@@ -86,10 +136,11 @@ export class RegisterScreen extends Component {
         })
         .then((response)=>{
             alert('Logged out!');
-            this.setState({showLogout:!this.state.showLogout});
+            this.setState({showLogout:!this.state.showLogout},()=>this.removeData().then(this.props.navigation.navigate('Home')));
             global.key=null;
-            this.removeToken();
-            this.props.navigation.navigate('Home');
+            global.user_id=null;
+            
+            
             
         })
         .catch((error)=>{
@@ -150,25 +201,37 @@ export class RegisterScreen extends Component {
             })
         })
         .then((response) => response.json())
-        .then((responseJson) => {
-            //console.log(responseJson.token);
-            let accessToken = responseJson.token;
-            this.storeToken(accessToken).then(()=>{
-                alert("Logged in!"+accessToken);
-                global.key=accessToken;
-                console.log("global"+global.key);
-                //this.setState({showLogout:!this.state.showLogout});
-                //this.props.navigation.navigate('Home');
-            }).then(()=>{
-                this.setState({showLogout:!this.state.showLogout});
-                this.props.navigation.navigate('Home');
-            })
-           
-            
-            
-        })
+            .then((responseJson) => {
+                console.log(responseJson);
+               /*  let accessToken = responseJson.token;
+                this.storeToken(accessToken).then(() => {
+                    //alert("Logged in!" + accessToken);
+                    global.key = accessToken;
+                    console.log("global" + global.key);
+                    //this.setState({showLogout:!this.state.showLogout});
+                    //this.props.navigation.navigate('Home');
+                    let idToken = responseJson.id;
+                    
+                    console.log("is my global key save? :"+global.key);
+                    this.storeIDToken(idToken).then(() => {
+                        alert("Logged in!" + accessToken+" "+idToken);
+                        global.id = idToken;
+                        console.log("global id: " + global.id, "token: "+ idToken);
+                        console.log("is my global id save? :"+global.user_id);
+                    }).then(() => {
+                        this.setState({ showLogout: !this.state.showLogout }, () => this.props.navigation.navigate('Home'));
+    
+                    })
+                }) */
+                let object = responseJson;
+                this.saveData(object);
+                global.key=object.token;
+                global.user_id=object.id;
+                console.log(global.key+"! "+global.user_id);
+
+            }).then(()=>{this.setState({ showLogout: !this.state.showLogout }, () => this.props.navigation.navigate('Home'));})
         .catch((error) => {
-            this.removeToken();
+            this.removeData();
             console.log(error);
             alert("Invalid email or password!");
          });

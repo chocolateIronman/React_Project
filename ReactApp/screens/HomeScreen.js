@@ -97,11 +97,6 @@ export class HomeScreen extends Component {
     this.setState({
       mounted:true
     });
-    if(global.key==null||global.key==undefined){
-      /* this.getToken().then( */
-        //this.refreshUpdate()
-        /* ) */
-    }
   }
 
   async getToken() {
@@ -129,49 +124,16 @@ export class HomeScreen extends Component {
     }
 
     return (
-      <View>
+      <View style={{flex:1,flexDirection: 'column', margin:20}}>
         <Refresh></Refresh>
-        <Text
-          style={{
-          textAlign: 'center',
-          color: '#8ceded',
-          fontSize: 45
-        }}>Chittr</Text>
-        <FlatList
-          data={this.state.chitsListData}
-          renderItem={({item}) => <Card
-          style={{
-          padding: 10,
-          margin: 10,
-          alignSelf: 'center'
-        }}>
-          <View
-            style={{
-            flex: 1,
-            flexDirection: 'row'
-          }}>
-            <Image
-              style={{
-              width: 50,
-              height: 50,
-              borderRadius: 50
-            }}
-              source={{
-              uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + item.user.user_id + '/photo'
-            }}></Image>
-            <View
-              style={{
-              marginTop: 15,
-              marginLeft: 10
-            }}>
-              <Text style={{
-                fontWeight: 'bold'
-              }}>{item.user.given_name} {item.user.family_name}</Text>
-              <Text
-                style={{
-                marginTop: 5,
-                maxWidth: 270
-              }}>{item.chit_content}</Text>
+        <Text style={{textAlign: 'center', color: '#8ceded',  fontSize: 45}}>Chittr</Text>
+        <FlatList data={this.state.chitsListData} renderItem={({item}) => <Card style={{padding: 10, margin: 10, alignSelf: 'center'}}>
+          <View style={{flexDirection: 'row'}}>
+            <Image style={{width: 50, height: 50, borderRadius: 50}}
+              source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + item.user.user_id + '/photo'}}></Image>
+            <View style={{marginTop: 15,marginLeft: 10}}>
+              <Text style={{fontWeight: 'bold'}}>{item.user.given_name} {item.user.family_name}</Text>
+              <Text style={{marginTop: 5, maxWidth: 270}}>{item.chit_content}</Text>
             </View>
           </View>
         </Card>}
