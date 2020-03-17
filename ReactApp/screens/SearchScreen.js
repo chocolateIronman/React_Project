@@ -35,7 +35,7 @@ export class SearchScreen extends Component {
             }
 
         }).then((response) => response.json()).then((responseJson) => {
-            this.setState({userListData: responseJson});
+            this.setState({userListData: responseJson},()=>this.setState({username:""}));
         })
         .catch((error) => {
             console.log(error);
@@ -60,7 +60,7 @@ export class SearchScreen extends Component {
                 </View>
 
                 <View>
-                    <TextInput placeholder="Type here..." style={{borderWidth: 1,borderRadius: 50,borderColor: 'grey'}}onChangeText={(text) => this.setState({username: text})}></TextInput>
+                    <TextInput value={this.state.username} placeholder="Type here..." style={{borderWidth: 1,borderRadius: 50,borderColor: 'grey'}}onChangeText={(text) => this.setState({username: text})}></TextInput>
                 </View>
             
                 <View style={{margin: 10}}>

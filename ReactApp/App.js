@@ -10,6 +10,7 @@ import {RegisterScreen} from "./screens/RegisterScreen";
 import {SearchScreen} from "./screens/SearchScreen";
 import {UserScreen} from './screens/UserScreen';
 import {PostScreen} from './screens/PostScreen';
+import { EditScreen } from './screens/EditScreen';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -38,6 +39,7 @@ export default function Navigation(){
        <Drawer.Screen name="Home" component={TabScreen} />
        <Drawer.Screen name="Login/Logout" component={RegisterScreen}/>
        <Drawer.Screen name='Profile' component={UserScreen} initialParams={{userid:0}}/>
+       <Drawer.Screen name="Edit Profile" component={EditScreen}/>
       </Drawer.Navigator>
     </NavigationContainer>
   )

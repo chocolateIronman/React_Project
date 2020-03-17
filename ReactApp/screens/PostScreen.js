@@ -60,7 +60,7 @@ export class PostScreen extends Component {
     .then((response)=>{
         console.debug(response);
         alert("Chit posted successfully!");
-        this.props.navigation.navigate('Home');
+        this.setState({chit_content:""},()=>this.props.navigation.navigate('Home'));
     })
     .catch((error)=>{
         console.error(error);
@@ -86,7 +86,7 @@ export class PostScreen extends Component {
           }
         },() =>this.setState({ hasKey: true }));
     }else {
-        this.getToken().then(() => {
+        this.displayData().then(() => {
           if (global.key != null && global.key != undefined) {
             console.debug("setting key in header2 ",global.key);
             this.setState({
@@ -103,16 +103,13 @@ export class PostScreen extends Component {
       }
   }
 
-  async getToken() {
+  async displayData() {
     try {
-      let token = await AsyncStorage.getItem('access_token');
-      //console.log("Token222 is:" + token);
-      global.key = token;
-      console.log("global token is:" + global.key);
-      //console.log(global.key);
-      //this.refreshUpdate()
-    } catch (error) {
-      console.log("Something went wrong!")
+      let user = await AsyncStorage.getItem('user');
+      let parsed = JSON.parse(user);
+      console.log("Parsed: "+parsed,"id: ",parsed.id,"token: ",parsed.token)
+    } catch(e) {
+      console.log("Error2: "+e);
     }
   }
 
@@ -127,7 +124,7 @@ export class PostScreen extends Component {
                     <Text style={{textAlign: 'center',  fontSize:15, color:'grey'}}>What is happening?</Text>
                 </View>
                 <View style={{paddingBottom:20}}>
-                    <TextInput multiline maxLength={140} placeholder="Type something..." style={{borderWidth:1, borderRadius:30, borderColor: 'grey',height:80}} onChangeText={(text) => this.setState({chit_content: text})} ></TextInput>
+                    <TextInput value={this.state.chit_content} multiline maxLength={140} placeholder="Type something..." style={{borderWidth:1, borderRadius:30, borderColor: 'grey',height:80}} onChangeText={(text) => this.setState({chit_content: text})} ></TextInput>
                     <Text style={{textAlign:'right', fontSize:10,color:'grey'}}>Max characters: 140</Text>
                 </View>
                 <View style={{margin:10}}>

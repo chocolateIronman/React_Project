@@ -127,6 +127,7 @@ export class HomeScreen extends Component {
       <View style={{flex:1,flexDirection: 'column', margin:20}}>
         <Refresh></Refresh>
         <Text style={{textAlign: 'center', color: '#8ceded',  fontSize: 45}}>Chittr</Text>
+        <Text style={{textAlign: 'center', color: 'orange',  fontSize: 15}}>Chittr Microblogging Platorm</Text>
         <FlatList data={this.state.chitsListData} renderItem={({item}) => <Card style={{padding: 10, margin: 10, alignSelf: 'center'}}>
           <View style={{flexDirection: 'row'}}>
             <Image style={{width: 50, height: 50, borderRadius: 50}}

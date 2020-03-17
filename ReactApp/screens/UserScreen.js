@@ -247,30 +247,7 @@ export class UserScreen extends Component {
     
     }
 
-   /*  async getToken() {
-        try {
-          let token = await AsyncStorage.getItem('access_token');
-          //console.log("Token222 is:" + token);
-          global.key = token;
-          console.log("global token is:" + global.key);
-          //console.log(global.key);
-          //this.refreshUpdate()
-        } catch (error) {
-          console.log("Something went wrong!")
-        }
-      }
-      async getIDToken() {
-        try {
-          let myID = await AsyncStorage.getItem('id_token');
-          //console.log("Token222 is:" + token);
-          global.id = myID;
-          console.log("global id is:" + global.id);
-          //console.log(global.key);
-          //this.refreshUpdate()
-        } catch (error) {
-          console.log("Something went wrong!")
-        }
-      } */
+  
 
       async displayData() {
         try {
@@ -298,7 +275,7 @@ export class UserScreen extends Component {
             else{}
         }
         if(this.state.buttonText=='Edit Profile'){
-            alert('Edit to happen!')
+            this.props.navigation.navigate('Edit Profile');
         }
         
     }
