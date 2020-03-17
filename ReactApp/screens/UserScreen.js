@@ -290,7 +290,7 @@ export class UserScreen extends Component {
                 </View>
                 <View style={{flex: 2,flexDirection: 'column', alignItems:'center'}}>
                 <Image style={{ width:100, height:100, borderRadius:50}} 
-                                    source={{uri: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'}}></Image>
+                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo'}}></Image>
                 <Text style={{fontWeight: 'bold',fontSize:25}}>{this.state.userInfoData.given_name} {this.state.userInfoData.family_name}</Text>
                 <View>
                     <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50}}><Text>{this.state.buttonText}</Text></TouchableOpacity>

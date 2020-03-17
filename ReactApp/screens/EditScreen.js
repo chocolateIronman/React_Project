@@ -15,6 +15,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Card} from 'react-native-shadow-cards';
 import AsyncStorage from '@react-native-community/async-storage';
+import {RNCamera} from 'react-native-camera';
 
 function Refresh(){
     useFocusEffect(useCallback(()=>{
@@ -44,7 +45,9 @@ export class EditScreen extends Component {
                 'Content-Type':'application/json'
             },
             hasKey:false,
-            body: {}
+            body: {},
+            togglePhoto:false,
+            myPhoto:''
         }
        
     }
@@ -94,6 +97,44 @@ export class EditScreen extends Component {
         });
     }
 
+    togglePhoto(){
+        this.setState({togglePhoto:!this.state.togglePhoto})
+      }
+
+    async takePicture(){
+        if (this.camera) {
+            const options = { quality: 0.5, base64: true };
+          try{
+              let data = await this.camera.takePictureAsync(options);
+              console.log(data.uri);
+              this.setState({myPhoto:data});
+              console.log("My photo:",this.state.myPhoto.uri)
+              this.postUserPhoto();
+              //this.setState({togglePhoto:false})
+          }catch(error){
+              console.log("Error1: "+error)
+          }
+      }
+    }
+       
+    postUserPhoto(){
+        console.log("Sending my photo: ",this.state.myPhoto.uri);
+        console.log("updating with headers: ",global.key);
+        return fetch("http://10.0.2.2:3333/api/v0.0.5/user/photo",{
+            method: 'POST',
+            headers: {
+                'X-Authorization':global.key
+            },
+            body: this.state.myPhoto
+        })
+            .then((response)=>{
+                console.debug("Response from posting photo: ",response)
+            })
+            .catch((error)=>{
+                console.error("OOOPS! "+error);
+            });
+    }
+      
     refreshUpdate(){
         if (global.key != null & global.key != undefined) {
             console.debug("setting key in header",global.key);
@@ -155,6 +196,7 @@ export class EditScreen extends Component {
 
     render(){
         if (this.state.hasKey) {
+            if(this.state.togglePhoto==false){
             return (
                 <View style={{flex:1,flexDirection: 'column', margin:20}}>
                 <Refresh></Refresh>
@@ -181,8 +223,23 @@ export class EditScreen extends Component {
                     <View style={{margin:10}}>
                         <Button title="Edit" onPress={()=>this.patchUserInfo()}></Button>
                     </View>
+                    <View style={{margin:10}}>
+                        <Text style={{textAlign:'center'}}>To edit your profile photo:</Text>
+                        <Button title="Edit Photo" onPress={()=>this.togglePhoto()}></Button>
+                    </View>
                 </View>
             );
+            }else{
+                return(
+                    <View style={{ flex: 1, flexDirection: 'column' }}>
+                      <RNCamera ref={ref => {this.camera = ref;}} style={ { flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}/>
+                      <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+                        <TouchableOpacity onPress={this.takePicture.bind(this)} style={{flex:0, backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50, margin:10}}><Text style={{ fontSize: 16 }}>CAPTURE</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.togglePhoto()} style={{flex:0, backgroundColor:'orange', padding:10, borderWidth:1, borderRadius:50,margin:10}}><Text style={{ fontSize: 16 }}>CANCEL</Text></TouchableOpacity>
+                      </View>
+                    </View>
+                  )
+            }
         }
         else{
             return(

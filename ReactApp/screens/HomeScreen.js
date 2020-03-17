@@ -135,6 +135,9 @@ export class HomeScreen extends Component {
             <View style={{marginTop: 15,marginLeft: 10}}>
               <Text style={{fontWeight: 'bold'}}>{item.user.given_name} {item.user.family_name}</Text>
               <Text style={{marginTop: 5, maxWidth: 270}}>{item.chit_content}</Text>
+              
+              <Image style={{width: 100, height: 60, borderColor:'black',borderWidth:1, alignSelf:'center'}}
+              source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo'}} alt="no photo"></Image>
             </View>
           </View>
         </Card>}

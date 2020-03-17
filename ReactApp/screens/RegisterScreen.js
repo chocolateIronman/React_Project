@@ -203,26 +203,6 @@ export class RegisterScreen extends Component {
         .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
-               /*  let accessToken = responseJson.token;
-                this.storeToken(accessToken).then(() => {
-                    //alert("Logged in!" + accessToken);
-                    global.key = accessToken;
-                    console.log("global" + global.key);
-                    //this.setState({showLogout:!this.state.showLogout});
-                    //this.props.navigation.navigate('Home');
-                    let idToken = responseJson.id;
-                    
-                    console.log("is my global key save? :"+global.key);
-                    this.storeIDToken(idToken).then(() => {
-                        alert("Logged in!" + accessToken+" "+idToken);
-                        global.id = idToken;
-                        console.log("global id: " + global.id, "token: "+ idToken);
-                        console.log("is my global id save? :"+global.user_id);
-                    }).then(() => {
-                        this.setState({ showLogout: !this.state.showLogout }, () => this.props.navigation.navigate('Home'));
-    
-                    })
-                }) */
                 let object = responseJson;
                 this.saveData(object);
                 global.key=object.token;
