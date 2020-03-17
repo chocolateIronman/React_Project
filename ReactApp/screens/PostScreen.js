@@ -8,7 +8,8 @@ import {
   ActivityIndicator,
   TextInput,
   TouchableOpacity,
-  StyleSheet
+  PermissionsAndroid,
+  CheckBox
 } from 'react-native';
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -16,6 +17,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Card} from 'react-native-shadow-cards';
 import {AsyncStorage} from '@react-native-community/async-storage';
 import {RNCamera} from 'react-native-camera';
+import Geolocation from 'react-native-geolocation-service';
+//import { CheckBox } from 'react-native-elements';
 
 
 function Refresh(){
@@ -44,7 +47,12 @@ export class PostScreen extends Component {
         hasKey:false,
         mounted:false,
         togglePhoto: false,
-        myPhoto:''
+        myPhoto:'',
+        location:null,
+        locationPermission:false,
+        checked:false,
+        longitude:0,
+        latitude:0
       }
       
   }
@@ -80,7 +88,12 @@ export class PostScreen extends Component {
         headers: this.state.requestHeaders,
         body: JSON.stringify({
           chit_content: this.state.chit_content,
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          location: {
+            "longitude": this.state.longitude,
+            "latitude": this.state.latitude
+          }
+          
         })
       })
         .then((response) => response.json()).then((responseJson) => {
@@ -101,7 +114,11 @@ export class PostScreen extends Component {
         headers: this.state.requestHeaders,
         body: JSON.stringify({
           chit_content: this.state.chit_content,
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          location: {
+            "longitude": this.state.longitude,
+            "latitude": this.state.latitude
+          }
         })
       })
         .then((response) => response.json()).then((responseJson) => {
@@ -181,6 +198,61 @@ postChitPhoto(){
     }
   }
 
+  findCoordinates=()=>{
+    if(!this.state.locationPermission){
+      this.state.locationPermission = this.requestLocationPermission();
+      }
+    Geolocation.getCurrentPosition(
+      (position)=>{
+        const location=JSON.stringify(position);
+        console.log(location);
+        this.setState({location},()=>this.setState({longitude:position.coords.longitude},()=>this.setState({latitude:position.coords.latitude})));
+        
+      },
+      (error)=>{
+        alert(error.message)
+      },
+      {
+        enableHighAccuracy:true,
+        timeout:20000,
+        maximumAge:1000
+      }
+    );
+  }
+
+  async requestLocationPermission() {
+    try{
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title:'ReactApp Loaction Permission',
+          message: 'This app requires access to your location',
+          buttonNeutral:'Ask Me Later',
+          buttonNegative:'Cancel',
+          buttonPositive:'OK',
+        },
+      );
+      if(granted===PermissionsAndroid.RESULTS.GRANTED){
+        console.log('You can access location');
+        return true;
+      }else{
+        console.log('Location permission denied');
+        return false;
+      }
+    } catch(err){
+      console.warn(err);
+    }
+  }
+
+  checked(){
+    if(this.state.checked==true){
+      this.setState({checked:false})
+    }
+    else{
+      this.setState({checked:true},()=>this.findCoordinates())
+    }
+  }
+
   render() {
     if (this.state.hasKey) {
       if(this.state.togglePhoto==false){
@@ -195,6 +267,11 @@ postChitPhoto(){
                 <View style={{paddingBottom:20}}>
                     <TextInput value={this.state.chit_content} multiline maxLength={140} placeholder="Type something..." style={{borderWidth:1, borderRadius:30, borderColor: 'grey',height:80}} onChangeText={(text) => this.setState({chit_content: text})} ></TextInput>
                     <Text style={{textAlign:'right', fontSize:10,color:'grey'}}>Max characters: 140</Text>
+                    <View style={{flexDirection:'row'}}>
+                      <CheckBox value={this.state.checked} onChange={()=>this.checked()}/>
+                      <Text style={{marginTop:5}}>Share Location</Text>
+                    </View>
+                    
                 </View>
                 <View style={{margin:10}}>
                     <Button title="Add photo" onPress={()=>this.togglePhoto()}></Button>
@@ -233,6 +310,7 @@ postChitPhoto(){
                 <View style={{margin:10}}>
                     <Button title="Log In" onPress={()=>this.props.navigation.navigate('Login/Logout')}></Button>
                 </View>
+                
             </View>
         );
     }
