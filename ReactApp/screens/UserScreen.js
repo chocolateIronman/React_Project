@@ -82,15 +82,15 @@ export class UserScreen extends Component {
                       }
                     });
                   }
-                  if (global.id != null & global.id != undefined) {
-                    console.debug("global id: ",global.id);
-                    this.setState({userID:global.id},()=>this.myFunctions())
+                  if (global.user_id != null & global.user_id != undefined) {
+                    console.debug("global id: ",global.user_id);
+                    this.setState({userID:global.user_id},()=>this.myFunctions())
                     
                 }else {
                     this.displayData().then(() => {
-                      if (global.id != null && global.id != undefined) {
-                        console.debug("global id2 ",global.id);
-                        this.setState({userID:global.id},()=>this.myFunctions())
+                      if (global.user_id != null && global.user_id != undefined) {
+                        console.debug("global id2 ",global.user_id);
+                        this.setState({userID:global.user_id},()=>this.myFunctions())
         
                       } else {
                         console.debug("can't find id");
@@ -208,14 +208,14 @@ export class UserScreen extends Component {
     }
 
     checkIfFollowed(){
-        if(global.id!==null&&global.id!==undefined){
+        if(global.user_id!==null&&global.user_id!==undefined){
             console.debug("followers",this.state.followers);
             //if(this.state.followers.forEach((item) => item.user_id == global.key)){
-            if(this.state.followers.map(follower => follower.user_id).includes(global.id)){
+            if(this.state.followers.map(follower => follower.user_id).includes(global.user_id)){
                 //.forEach((item) => item.user_id == global.key)){
                 this.setState({buttonText:'Unfollow'})
             }
-            else if(global.id==this.state.userID)
+            else if(global.user_id==this.state.userID)
             {
                 this.setState({buttonText:'Edit Profile'})
             }
