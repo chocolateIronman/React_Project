@@ -12,6 +12,7 @@ import {UserScreen} from './screens/UserScreen';
 import {PostScreen} from './screens/PostScreen';
 import { EditScreen } from './screens/EditScreen';
 
+
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -27,6 +28,7 @@ const TabScreen = () =>{
       <Tab.Screen name="Home" component={HomeScreen}></Tab.Screen>
       <Tab.Screen name="Search" component={SearchScreen}></Tab.Screen>
       <Tab.Screen name="Post Chit" component={PostScreen}></Tab.Screen>
+      
     </Tab.Navigator>
   )
 }

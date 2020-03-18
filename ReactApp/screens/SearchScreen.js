@@ -6,7 +6,6 @@ import {
     FlatList,
     Image,
     ActivityIndicator,
-    AsyncStorage,
     TextInput,
     TouchableOpacity
 } from 'react-native';
@@ -14,6 +13,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Card} from 'react-native-shadow-cards';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 

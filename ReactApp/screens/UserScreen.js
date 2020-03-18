@@ -253,7 +253,7 @@ export class UserScreen extends Component {
         try {
           let user = await AsyncStorage.getItem('user');
           let parsed = JSON.parse(user);
-          console.log("Parsed: "+parsed,"id: ",parsed.id,"token: ",parsed.token)
+         
         } catch(e) {
           console.log("Error2: "+e);
         }
@@ -290,7 +290,7 @@ export class UserScreen extends Component {
                 </View>
                 <View style={{flex: 2,flexDirection: 'column', alignItems:'center'}}>
                 <Image style={{ width:100, height:100, borderRadius:50}} 
-                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo'}}></Image>
+                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo?timestamp='+Date.now()}}></Image>
                 <Text style={{fontWeight: 'bold',fontSize:25}}>{this.state.userInfoData.given_name} {this.state.userInfoData.family_name}</Text>
                 <View>
                     <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50}}><Text>{this.state.buttonText}</Text></TouchableOpacity>
@@ -307,7 +307,7 @@ export class UserScreen extends Component {
                         renderItem={({item}) =><Card style={{padding: 10,margin: 10,alignSelf: 'center'}} >
                             <View style={{flex: 1,flexDirection: 'row'}} >
                                 <Image style={{width: 50, height: 50, borderRadius: 50}} 
-                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo'}}></Image>
+                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo?timestamp='+Date.now()}}></Image>
                                 <View  style={{marginTop: 15,marginLeft: 10}}>
                                     <Text style={{fontWeight: 'bold'}}>{this.state.userInfoData.given_name} {this.state.userInfoData.family_name} </Text>
                                     <Text style={{marginTop: 5, maxWidth: 270}}>{item.chit_content}</Text>
@@ -334,7 +334,7 @@ export class UserScreen extends Component {
                     </View>
                     <View style={{flexDirection: 'column', alignItems:'center'}}>
                         <Image style={{ width:100, height:100, borderRadius:50}} 
-                                source={{uri: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'}}></Image>
+                                source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo?timestamp='+Date.now()}}></Image>
                         <Text style={{fontWeight: 'bold',fontSize:25}}>{this.state.userInfoData.given_name} {this.state.userInfoData.family_name}</Text>
                         <View>
                             <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50}}><Text>{this.state.buttonText}</Text></TouchableOpacity>
@@ -351,7 +351,7 @@ export class UserScreen extends Component {
                         renderItem={({item}) => <TouchableOpacity onPress={() => this.getID(item.user_id)}><Card style={{padding: 10,margin: 10,alignSelf: 'center'}} >
                             <View style={{flex: 1,flexDirection: 'row'}} >
                                 <Image style={{width: 50, height: 50, borderRadius: 50}} 
-                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+item.user_id+'/photo'}}></Image>
+                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+item.user_id+'/photo?timestamp='+Date.now()}}></Image>
                                 <View  style={{marginTop: 15,marginLeft: 10}}>
                                     <Text style={{fontWeight: 'bold'}}>{item.given_name} {item.family_name} </Text>
                                     
@@ -375,7 +375,7 @@ export class UserScreen extends Component {
                     </View>
                     <View style={{flexDirection: 'column', alignItems:'center'}}>
                         <Image style={{ width:100, height:100, borderRadius:50}} 
-                                source={{uri: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'}}></Image>
+                                source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo?timestamp='+Date.now()}}></Image>
                         <Text style={{fontWeight: 'bold',fontSize:25}}>{this.state.userInfoData.given_name} {this.state.userInfoData.family_name}</Text>
                         <View>
                             <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50}}><Text>{this.state.buttonText}</Text></TouchableOpacity>
@@ -392,7 +392,7 @@ export class UserScreen extends Component {
                         renderItem={({item}) => <TouchableOpacity onPress={() => this.getID(item.user_id)}><Card style={{padding: 10,margin: 10,alignSelf: 'center'}} >
                             <View style={{flex: 1,flexDirection: 'row'}} >
                                 <Image style={{width: 50, height: 50, borderRadius: 50}} 
-                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+item.user_id+'/photo'}}></Image>
+                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+item.user_id+'/photo?timestamp='+Date.now()}}></Image>
                                 <View  style={{marginTop: 15,marginLeft: 10}}>
                                     <Text style={{fontWeight: 'bold'}}>{item.given_name} {item.family_name} </Text>
                                     

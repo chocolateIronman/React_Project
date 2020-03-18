@@ -5,13 +5,13 @@ import {
   Button,
   FlatList,
   Image,
-  ActivityIndicator,
-  AsyncStorage
+  ActivityIndicator
 } from 'react-native';
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Card} from 'react-native-shadow-cards';
+import AsyncStorage from '@react-native-community/async-storage';
 
 function Refresh(){
   useFocusEffect(useCallback(()=>{
@@ -48,8 +48,10 @@ export class HomeScreen extends Component {
     .then((responseJson) => {
       this.setState({ 
         isLoading: false, 
-        chitsListData: responseJson 
+        chitsListData: responseJson
       });
+     
+      
     }).catch((error) => {
       console.log(error);
     });
@@ -131,13 +133,14 @@ export class HomeScreen extends Component {
         <FlatList data={this.state.chitsListData} renderItem={({item}) => <Card style={{padding: 10, margin: 10, alignSelf: 'center'}}>
           <View style={{flexDirection: 'row'}}>
             <Image style={{width: 50, height: 50, borderRadius: 50}}
-              source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + item.user.user_id + '/photo'}}></Image>
+              source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + item.user.user_id + '/photo?timestamp='+Date.now()}}></Image>
             <View style={{marginTop: 15,marginLeft: 10}}>
               <Text style={{fontWeight: 'bold'}}>{item.user.given_name} {item.user.family_name}</Text>
               <Text style={{marginTop: 5, maxWidth: 270}}>{item.chit_content}</Text>
               
               <Image style={{width: 100, height: 60, borderColor:'black',borderWidth:1, alignSelf:'center'}}
               source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo'}} alt="no photo"></Image>
+              
             </View>
           </View>
         </Card>}

@@ -110,7 +110,7 @@ export class EditScreen extends Component {
               this.setState({myPhoto:data});
               console.log("My photo:",this.state.myPhoto.uri)
               this.postUserPhoto();
-              //this.setState({togglePhoto:false})
+              this.setState({togglePhoto:false})
           }catch(error){
               console.log("Error1: "+error)
           }
@@ -185,7 +185,7 @@ export class EditScreen extends Component {
         try {
           let user = await AsyncStorage.getItem('user');
           let parsed = JSON.parse(user);
-          console.log("Parsed: "+parsed,"id: ",parsed.id,"token: ",parsed.token)
+          
         } catch(e) {
           console.log("Error2: "+e);
         }

@@ -9,13 +9,14 @@ import {
   TextInput,
   TouchableOpacity,
   PermissionsAndroid,
-  CheckBox
+  CheckBox,
+  AsyncStorage
 } from 'react-native';
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Card} from 'react-native-shadow-cards';
-import {AsyncStorage} from '@react-native-community/async-storage';
+//import {AsyncStorage} from '@react-native-community/async-storage';
 import {RNCamera} from 'react-native-camera';
 import Geolocation from 'react-native-geolocation-service';
 //import { CheckBox } from 'react-native-elements';
@@ -52,7 +53,8 @@ export class PostScreen extends Component {
         locationPermission:false,
         checked:false,
         longitude:0,
-        latitude:0
+        latitude:0,
+        chitData:[]
       }
       
   }
@@ -64,8 +66,9 @@ export class PostScreen extends Component {
           let data = await this.camera.takePictureAsync(options);
           console.log(data.uri);
           this.setState({myPhoto:data});
+          this.setState({togglePhoto:!this.state.togglePhoto});
           console.log("My photo:",this.state.myPhoto.uri)
-          this.setState({togglePhoto:false})
+          
       }catch(error){
           console.log("Error1: "+error)
       }
@@ -143,6 +146,7 @@ postChitPhoto(){
   })
   .then((response)=>{
     console.debug("Response from posting photo: "+response)
+    this.setState({togglePhoto:!this.state.togglePhoto})
 })
 .catch((error)=>{
     console.error("OOOPS! "+error);
@@ -162,7 +166,7 @@ postChitPhoto(){
   }
 
   refreshUpdate(){
-    if (global.key != null & global.key != undefined) {
+    if (global.key !== null & global.key !== undefined) {
         console.debug("setting key in header",global.key);
         this.setState({
           requestHeaders: {
@@ -172,7 +176,7 @@ postChitPhoto(){
         },() =>this.setState({ hasKey: true }));
     }else {
         this.displayData().then(() => {
-          if (global.key != null && global.key != undefined) {
+          if (global.key !== null && global.key !== undefined) {
             console.debug("setting key in header2 ",global.key);
             this.setState({
               requestHeaders: {
@@ -192,7 +196,6 @@ postChitPhoto(){
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
-      console.log("Parsed: "+parsed,"id: ",parsed.id,"token: ",parsed.token)
     } catch(e) {
       console.log("Error2: "+e);
     }
@@ -253,6 +256,44 @@ postChitPhoto(){
     }
   }
 
+async saveChit(){
+  const chit=this.state.chit_content;
+  AsyncStorage.getItem('savedChits', (err, result) => {
+    var chits = [{'id':global.user_id,'chit_content':chit}];
+  if (result !== null) {
+    console.log('Data Found', result);
+    var newChit = JSON.parse(result).concat(chits);
+    AsyncStorage.setItem('savedChits', JSON.stringify(newChit));
+    this.displayChits()
+  } else {
+    console.log('Data Not Found');
+    AsyncStorage.setItem('savedChits', JSON.stringify(chits));
+    this.displayChits()
+  }
+});
+}
+
+async displayChits(){
+  AsyncStorage.getItem('savedChits', (err, result) => {
+    console.log(result);
+    this.setState({chitData:result})
+    console.log(this.state.chitData)
+    global.chits=result;
+    console.log(global.chits)
+  });
+}
+
+async removeChits(){
+  try{
+      await AsyncStorage.removeItem('savedChits');
+      this.displayData();
+  }catch(error){
+      console.log("Error3: "+error);
+  }
+}
+
+
+ 
   render() {
     if (this.state.hasKey) {
       if(this.state.togglePhoto==false){
@@ -279,7 +320,9 @@ postChitPhoto(){
                 <View style={{margin:10}}>
                     <Button title="Chit" onPress={()=>this.checkIfEmpty()}></Button>
                 </View>
-                
+                <View style={{margin:10}}>
+                    <Button title="Save Chit" onPress = { () => this.saveChit() }></Button>
+                </View>
                 
 
 
@@ -287,13 +330,15 @@ postChitPhoto(){
             </View>
         );
       }
-      else{
+      if(this.state.togglePhoto==true){
         return(
           <View style={{ flex: 1, flexDirection: 'column' }}>
             <RNCamera ref={ref => {this.camera = ref;}} style={ { flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}/>
             <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-              <TouchableOpacity onPress={this.takePicture.bind(this)} style={{flex:0, backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50, margin:10}}><Text style={{ fontSize: 16 }}>CAPTURE</Text></TouchableOpacity>
-              <TouchableOpacity onPress={()=>this.togglePhoto()} style={{flex:0, backgroundColor:'orange', padding:10, borderWidth:1, borderRadius:50,margin:10}}><Text style={{ fontSize: 16 }}>CANCEL</Text></TouchableOpacity>
+              <TouchableOpacity onPress={this.takePicture.bind(this)} style={{flex:0, backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50, margin:5}}><Text style={{ fontSize: 16 }}>CAPTURE</Text></TouchableOpacity>
+            
+              <TouchableOpacity onPress={()=>this.togglePhoto()} style={{flex:0, backgroundColor:'orange', padding:10, borderWidth:1, borderRadius:50,margin:5}}><Text style={{ fontSize: 16 }}>CANCEL</Text></TouchableOpacity>
+            
             </View>
           </View>
         )

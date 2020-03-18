@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import AsyncStorage from '@react-native-community/async-storage';;
+import AsyncStorage from '@react-native-community/async-storage';
 
 const ACCESS_TOKEN ='access_token';
 
@@ -24,55 +24,6 @@ export class RegisterScreen extends Component {
             username:''
         };
       }
-
-    /* async storeToken(accessToken){
-        try{
-            await AsyncStorage.setItem(ACCESS_TOKEN, accessToken);
-            this.getToken();
-        }catch(error){
-            console.log("Something went wrong!")
-        }
-    }
-    async getToken(){
-        try{
-            let token = await AsyncStorage.getItem(ACCESS_TOKEN);
-            console.log("Token is:" + token);
-        }catch(error){
-            console.log("Something went wrong!")
-        }
-    }
-    async removeToken(){
-        try{
-            await AsyncStorage.removeItem(ACCESS_TOKEN);
-            this.getToken();
-        }catch(error){
-            console.log("Something went wrong!")
-        }
-    } */
-    /* async storeIDToken(idToken){
-        try{
-            await AsyncStorage.setItem('id_token', idToken);
-            this.getIDToken();
-        }catch(error){
-            console.log("Something went wrong saving!")
-        }
-    }
-    async getIDToken(){
-        try{
-            let myID = await AsyncStorage.getItem('id_token').then(global.user_id=null);
-            console.log("ID is:" + myID);
-        }catch(error){
-            console.log("Something went wrong retrieving!")
-        }
-    }
-    async removeIDToken(){
-        try{
-            await AsyncStorage.removeItem('id_token');
-            this.getIDToken();
-        }catch(error){
-            console.log("Something went wrong removing!")
-        }
-    } */
     
     async saveData(obj){
         try{
@@ -86,7 +37,7 @@ export class RegisterScreen extends Component {
         try {
           let user = await AsyncStorage.getItem('user');
           let parsed = JSON.parse(user);
-          console.log("Parsed: "+parsed,"id: ",parsed.id,"token: ",parsed.token)
+          
         } catch(e) {
           console.log("Error2: "+e);
         }
@@ -96,6 +47,8 @@ export class RegisterScreen extends Component {
         try{
             await AsyncStorage.removeItem('user');
             this.displayData();
+            global.key=null;
+            global.user_id=null;
         }catch(error){
             console.log("Error3: "+error);
         }
