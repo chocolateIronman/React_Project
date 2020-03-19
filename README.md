@@ -1,2 +1,17 @@
 # React_Project
- Mobile app development react project
+
+React_Projet is a 3-rd year React Native assignment project for the Mobile Applications Development Unit at MMU.
+
+## Installation
+
+Install all the node modules with the following command:
+
+```
+npm install
+```
+Run the app on Android with the following command:
+```
+npx react-native run-android
+```
+## Note!
+Before running please ensure that the server is up and running!
