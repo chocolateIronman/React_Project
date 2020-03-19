@@ -14,4 +14,8 @@ Run the app on Android with the following command:
 npx react-native run-android
 ```
 ## Note!
-Before running please ensure that the server is up and running!
+Before trying to run the application please ensure that the server is up and running!
+
+## Author
+Nikol Stoyanova
+Student ID: 17069455
