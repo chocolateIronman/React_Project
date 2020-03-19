@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, Button, FlatList, Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer'
-import {Card} from 'react-native-shadow-cards';
 import {HomeScreen} from './screens/HomeScreen';
 import {RegisterScreen} from "./screens/RegisterScreen";
 import {SearchScreen} from "./screens/SearchScreen";
