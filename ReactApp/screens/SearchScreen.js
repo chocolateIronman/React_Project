@@ -55,8 +55,8 @@ export class SearchScreen extends Component {
         return (
             <View style={{flex: 1,flexDirection: 'column',margin: 20}}>
                 <View style={{paddingBottom: 20}}>
-                    <Text style={{textAlign: 'center',color: '#8ceded',fontSize: 45}}>Chittr</Text>
-                    <Text style={{textAlign: 'center',fontSize: 15}}>Search for a user</Text>
+                    <Text style={{textAlign: 'center',color: '#3892ff',fontSize: 45}}>Chittr</Text>
+                    <Text style={{textAlign: 'center',fontSize: 20, color:'orange'}}>Search for a user</Text>
                 </View>
 
                 <View>

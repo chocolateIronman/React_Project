@@ -208,7 +208,7 @@ postChitPhoto(){
     Geolocation.getCurrentPosition(
       (position)=>{
         const location=JSON.stringify(position);
-        console.log(location);
+        console.log(position);
         this.setState({location},()=>this.setState({longitude:position.coords.longitude},()=>this.setState({latitude:position.coords.latitude})));
         
       },
@@ -279,6 +279,7 @@ async displayChits(){
     this.setState({chitData:result})
     console.log(this.state.chitData)
     global.chits=result;
+    console.log(global.chits);
   });
 }
 
@@ -300,16 +301,16 @@ async removeChits(){
             <View style={{flex:1,flexDirection: 'column', margin:20}}>
             <Refresh></Refresh>
                 <View style={{paddingBottom:20}}>
-                    <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
-                    <Text style={{textAlign: 'center',  fontSize:25}}>Post your thoughts in a chit!</Text>
+                    <Text style={{textAlign: 'center', color: '#3892ff', fontSize:45}}>Chittr</Text>
+                    <Text style={{textAlign: 'center',  fontSize:20, color:'orange'}}>Post your thoughts in a chit!</Text>
                     <Text style={{textAlign: 'center',  fontSize:15, color:'grey'}}>What is happening?</Text>
                 </View>
                 <View style={{paddingBottom:20}}>
-                    <TextInput value={this.state.chit_content} multiline maxLength={140} placeholder="Type something..." style={{borderWidth:1, borderRadius:30, borderColor: 'grey',height:80}} onChangeText={(text) => this.setState({chit_content: text})} ></TextInput>
-                    <Text style={{textAlign:'right', fontSize:10,color:'grey'}}>Max characters: 140</Text>
+                    <TextInput value={this.state.chit_content} multiline maxLength={141} placeholder="Type something..." style={{borderWidth:1, borderRadius:30, borderColor: 'grey',height:80}} onChangeText={(text) => this.setState({chit_content: text})} ></TextInput>
+                    <Text style={{textAlign:'right', fontSize:10,color:'grey'}}>Max characters: 141</Text>
                     <View style={{flexDirection:'row'}}>
                       <CheckBox value={this.state.checked} onChange={()=>this.checked()}/>
-                      <Text style={{marginTop:5}}>Share Location</Text>
+                      <Text style={{marginTop:5, color:'grey'}}>Share Location</Text>
                     </View>
                     
                 </View>
@@ -322,6 +323,8 @@ async removeChits(){
                 <View style={{margin:10}}>
                     <Button title="Save Chit" onPress = { () => this.saveChit() }></Button>
                 </View>
+                
+           
 
             </View>
         );
@@ -331,9 +334,9 @@ async removeChits(){
           <View style={{ flex: 1, flexDirection: 'column' }}>
             <RNCamera ref={ref => {this.camera = ref;}} style={ { flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}/>
             <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-              <TouchableOpacity onPress={this.takePicture.bind(this)} style={{flex:0, backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50, margin:5}}><Text style={{ fontSize: 16 }}>CAPTURE</Text></TouchableOpacity>
+              <TouchableOpacity onPress={this.takePicture.bind(this)} style={{flex:0, backgroundColor:'#3892ff', padding:10, borderWidth:1, borderRadius:50, borderColor:'#3892ff', margin:5}}><Text style={{ fontSize: 16 }}>CAPTURE</Text></TouchableOpacity>
             
-              <TouchableOpacity onPress={()=>this.togglePhoto()} style={{flex:0, backgroundColor:'orange', padding:10, borderWidth:1, borderRadius:50,margin:5}}><Text style={{ fontSize: 16 }}>CANCEL</Text></TouchableOpacity>
+              <TouchableOpacity onPress={()=>this.togglePhoto()} style={{flex:0, backgroundColor:'orange', padding:10, borderWidth:1, borderRadius:50, borderColor:'orange', margin:5}}><Text style={{ fontSize: 16 }}>CANCEL</Text></TouchableOpacity>
             
             </View>
           </View>
@@ -345,8 +348,8 @@ async removeChits(){
             <View style={{flex:1,flexDirection: 'column', margin:20}}>
                 <Refresh></Refresh>
                 <View style={{paddingBottom:20}}>
-                    <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
-                    <Text style={{textAlign: 'center',  fontSize:15}}>You cannot post chits unless logged in!</Text>
+                    <Text style={{textAlign: 'center', color: '#3892ff', fontSize:45}}>Chittr</Text>
+                    <Text style={{textAlign: 'center',  fontSize:15, color:'orange'}}>You cannot post chits unless logged in!</Text>
                 </View>
                 <View style={{margin:10}}>
                     <Button title="Log In" onPress={()=>this.props.navigation.navigate('Login/Logout')}></Button>

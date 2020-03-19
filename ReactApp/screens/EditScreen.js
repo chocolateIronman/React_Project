@@ -89,6 +89,7 @@ export class EditScreen extends Component {
         }).then((response)=>{
             console.debug(response);
             alert("Profile updated successfully!");
+            this.props.navigation.navigate('Profile')
             
         })
         .catch((error)=>{
@@ -201,8 +202,14 @@ export class EditScreen extends Component {
                 <View style={{flex:1,flexDirection: 'column', margin:20}}>
                 <Refresh></Refresh>
                     <View style={{paddingBottom:20}}>
-                        <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
-                        <Text style={{textAlign: 'center',  fontSize:25}}>Edit your profile:</Text>
+                        <Text style={{textAlign: 'center', color: '#3892ff', fontSize:45}}>Chittr</Text>
+                        <Text style={{textAlign: 'center',  fontSize:15, marginBottom:20, color:'orange'}}>Edit your profile:</Text>
+                        <View style={{flexDirection: 'row', alignItems:'center', alignSelf:'center'}}>
+                            <Image style={{ width:100, height:100, borderRadius:50}} 
+                                    source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + this.state.userID + '/photo?timestamp='+Date.now()}}></Image>
+                                     <TouchableOpacity  onPress={()=>this.togglePhoto()} style={{flex:0, backgroundColor:'#3892ff', padding:10, borderWidth:1, borderRadius:50, borderColor:'#3892ff', margin:10}}><Text style={{ fontSize: 16 }}>Edit Photo</Text></TouchableOpacity>
+                        </View>
+                       
                     </View>
                     <View style={{paddingBottom:20}}>
                        
@@ -223,10 +230,6 @@ export class EditScreen extends Component {
                     <View style={{margin:10}}>
                         <Button title="Edit" onPress={()=>this.patchUserInfo()}></Button>
                     </View>
-                    <View style={{margin:10}}>
-                        <Text style={{textAlign:'center'}}>To edit your profile photo:</Text>
-                        <Button title="Edit Photo" onPress={()=>this.togglePhoto()}></Button>
-                    </View>
                 </View>
             );
             }else{
@@ -246,8 +249,8 @@ export class EditScreen extends Component {
                 <View style={{flex:1,flexDirection: 'column', margin:20}}>
                     <Refresh></Refresh>
                     <View style={{paddingBottom:20}}>
-                        <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
-                        <Text style={{textAlign: 'center',  fontSize:15}}>You cannot edit your profile unless logged in!</Text>
+                        <Text style={{textAlign: 'center', color: '#3892ff', fontSize:45}}>Chittr</Text>
+                        <Text style={{textAlign: 'center',  fontSize:15, color:'orange'}}>You cannot edit your profile unless logged in!</Text>
                     </View>
                     <View style={{margin:10}}>
                         <Button title="Log In" onPress={()=>this.props.navigation.navigate('Login/Logout')}></Button>

@@ -16,10 +16,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 function Refresh(){
   useFocusEffect(useCallback(()=>{
     console.debug("got focus");
-    //if(window.HomeScreenComponent.state.mounted) {
       console.debug("refreshing");
       window.HomeScreenComponent.refreshUpdate();
-    //}
     return()=>{console.debug("lost focus");}
   },[]));
   return null;
@@ -68,9 +66,6 @@ export class HomeScreen extends Component {
       },() =>this.getData().then(
         this.setState({ isLoading: false })
       ));
-      /* this.getData().then(
-        this.setState({ isLoading: false })
-      ) */
     } else {
       this.getToken().then(() => {
         if (global.key != null && global.key != undefined) {
@@ -104,11 +99,8 @@ export class HomeScreen extends Component {
   async getToken() {
     try {
       let token = await AsyncStorage.getItem('access_token');
-      //console.log("Token222 is:" + token);
       global.key = token;
       console.log("global token is:" + global.key);
-      //console.log(global.key);
-      //this.refreshUpdate()
     } catch (error) {
       console.log("Something went wrong!")
     }
@@ -128,8 +120,8 @@ export class HomeScreen extends Component {
     return (
       <View style={{flex:1,flexDirection: 'column', margin:20}}>
         <Refresh></Refresh>
-        <Text style={{textAlign: 'center', color: '#8ceded',  fontSize: 45}}>Chittr</Text>
-        <Text style={{textAlign: 'center', color: 'orange',  fontSize: 15}}>Chittr Microblogging Platorm</Text>
+        <Text style={{textAlign: 'center', color: '#3892ff',  fontSize: 45}}>Chittr</Text>
+        <Text style={{textAlign: 'center', color: 'orange',  fontSize: 20}}>Chittr Microblogging Platorm</Text>
         <FlatList data={this.state.chitsListData} renderItem={({item}) => <Card style={{padding: 10, margin: 10, alignSelf: 'center'}}>
           <View style={{flexDirection: 'row'}}>
             <Image style={{width: 50, height: 50, borderRadius: 50}}

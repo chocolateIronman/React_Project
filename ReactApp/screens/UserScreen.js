@@ -20,10 +20,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 function Refresh(){
     useFocusEffect(useCallback(()=>{
       console.debug("got focus");
-      //if(window.HomeScreenComponent.state.mounted) {
         console.debug("refreshing");
         window.UserScreenComponent.refreshUpdate();
-      //}
       return()=>{console.debug("lost focus");}
     },[]));
     return null;
@@ -126,8 +124,7 @@ export class UserScreen extends Component {
 
     myFunctions() {
         this.getUserInfo().then( this.getFollowers()).then(this.getFollowing()).then(this.props.route.params.userid=0)
-        //this.getFollowers();
-        //this.getFollowing();
+  
     }
 
     toggleTweets() {
@@ -210,9 +207,9 @@ export class UserScreen extends Component {
     checkIfFollowed(){
         if(global.user_id!==null&&global.user_id!==undefined){
             console.debug("followers",this.state.followers);
-            //if(this.state.followers.forEach((item) => item.user_id == global.key)){
+          
             if(this.state.followers.map(follower => follower.user_id).includes(global.user_id)){
-                //.forEach((item) => item.user_id == global.key)){
+
                 this.setState({buttonText:'Unfollow'})
             }
             else if(global.user_id==this.state.userID)
@@ -286,14 +283,14 @@ export class UserScreen extends Component {
             <View style={{flex: 1,flexDirection: 'column',margin: 20}}>
              <Refresh></Refresh>
                 <View style={{paddingBottom: 20}}>
-                    <Text style={{textAlign: 'center',color: '#8ceded',fontSize: 45}}>Chittr</Text>
+                    <Text style={{textAlign: 'center',color: '#3892ff',fontSize: 45}}>Chittr</Text>
                 </View>
                 <View style={{flex: 2,flexDirection: 'column', alignItems:'center'}}>
                 <Image style={{ width:100, height:100, borderRadius:50}} 
                                     source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo?timestamp='+Date.now()}}></Image>
                 <Text style={{fontWeight: 'bold',fontSize:25}}>{this.state.userInfoData.given_name} {this.state.userInfoData.family_name}</Text>
                 <View>
-                    <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50}}><Text>{this.state.buttonText}</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#3892ff', padding:10, borderWidth:1, borderRadius:50, borderColor:'#3892ff'}}><Text>{this.state.buttonText}</Text></TouchableOpacity>
                 </View>
                 <View style={{flexDirection: 'row'}}>
                     <TouchableOpacity onPress={() => this.toggleFollowers()}><Text style={{margin:20}}>Followers</Text></TouchableOpacity>
@@ -311,6 +308,8 @@ export class UserScreen extends Component {
                                 <View  style={{marginTop: 15,marginLeft: 10}}>
                                     <Text style={{fontWeight: 'bold'}}>{this.state.userInfoData.given_name} {this.state.userInfoData.family_name} </Text>
                                     <Text style={{marginTop: 5, maxWidth: 270}}>{item.chit_content}</Text>
+                                    <Image style={{width: 100, height: 60, borderColor:'black',borderWidth:1, alignSelf:'center'}}
+              source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo'}} alt="no photo"></Image>
                                 </View>
                                
                             </View>
@@ -330,14 +329,14 @@ export class UserScreen extends Component {
                 <View style={{flex: 1,flexDirection: 'column',margin: 20}}>
                  <Refresh></Refresh>
                     <View style={{paddingBottom: 20}}>
-                        <Text style={{textAlign: 'center',color: '#8ceded',fontSize: 45}}>Chittr</Text>
+                        <Text style={{textAlign: 'center',color: '#3892ff',fontSize: 45}}>Chittr</Text>
                     </View>
                     <View style={{flexDirection: 'column', alignItems:'center'}}>
                         <Image style={{ width:100, height:100, borderRadius:50}} 
                                 source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo?timestamp='+Date.now()}}></Image>
                         <Text style={{fontWeight: 'bold',fontSize:25}}>{this.state.userInfoData.given_name} {this.state.userInfoData.family_name}</Text>
                         <View>
-                            <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50}}><Text>{this.state.buttonText}</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#3892ff', padding:10, borderWidth:1, borderRadius:50, borderColor:'#3892ff'}}><Text>{this.state.buttonText}</Text></TouchableOpacity>
                         </View>
                         <View style={{flexDirection: 'row'}}>
                             <TouchableOpacity onPress={() => this.toggleFollowers()}><Text style={{margin:20}}>Followers</Text></TouchableOpacity>
@@ -371,14 +370,14 @@ export class UserScreen extends Component {
                 <View style={{flex: 1,flexDirection: 'column',margin: 20}}>
                  <Refresh></Refresh>
                     <View style={{paddingBottom: 20}}>
-                        <Text style={{textAlign: 'center',color: '#8ceded',fontSize: 45}}>Chittr</Text>
+                        <Text style={{textAlign: 'center',color: '#3892ff',fontSize: 45}}>Chittr</Text>
                     </View>
                     <View style={{flexDirection: 'column', alignItems:'center'}}>
                         <Image style={{ width:100, height:100, borderRadius:50}} 
                                 source={{uri: 'http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userInfoData.user_id+'/photo?timestamp='+Date.now()}}></Image>
                         <Text style={{fontWeight: 'bold',fontSize:25}}>{this.state.userInfoData.given_name} {this.state.userInfoData.family_name}</Text>
                         <View>
-                            <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#8ceded', padding:10, borderWidth:1, borderRadius:50}}><Text>{this.state.buttonText}</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={()=>this.toggleFollow()} style={{alignItems:'center', backgroundColor:'#3892ff', padding:10, borderWidth:1, borderColor:'#3892ff', borderRadius:50}}><Text>{this.state.buttonText}</Text></TouchableOpacity>
                         </View>
                         <View style={{flexDirection: 'row'}}>
                             <TouchableOpacity onPress={() => this.toggleFollowers()}><Text style={{margin:20}}>Followers</Text></TouchableOpacity>

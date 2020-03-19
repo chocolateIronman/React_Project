@@ -160,7 +160,6 @@ export class RegisterScreen extends Component {
                 this.saveData(object);
                 global.key=object.token;
                 global.user_id=object.id;
-                console.log(global.key+"! "+global.user_id);
 
             }).then(()=>{this.setState({ showLogout: !this.state.showLogout }, () => this.props.navigation.navigate('Home'));})
         .catch((error) => {
@@ -177,8 +176,8 @@ export class RegisterScreen extends Component {
             return(
                 <View>
                     <View style={{paddingBottom:20}}>
-                        <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
-                        <Text style={{textAlign: 'center',  fontSize:25}}>Log out</Text>
+                        <Text style={{textAlign: 'center', color: '#3892ff', fontSize:45}}>Chittr</Text>
+                        <Text style={{textAlign: 'center',  fontSize:20, color:'orange'}}>Log out</Text>
                     </View>
                     <View style={{margin:10}}>
                         <Button title="Log out" onPress={()=>this.logOut()}></Button>
@@ -193,8 +192,8 @@ export class RegisterScreen extends Component {
                 
                 <View style={{flex:1,flexDirection: 'column', margin:20}}>
                     <View style={{paddingBottom:20}}>
-                        <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
-                        <Text style={{textAlign: 'center',  fontSize:25}}>Register</Text>
+                        <Text style={{textAlign: 'center', color: '#3892ff', fontSize:45}}>Chittr</Text>
+                        <Text style={{textAlign: 'center',  fontSize:20, color:'orange'}}>Register</Text>
                     </View>
                     <View style={{paddingBottom:20}}>
                        
@@ -228,8 +227,8 @@ export class RegisterScreen extends Component {
             return(
                 <View style={{flex:1,flexDirection: 'column', margin:20}}>
                     <View style={{paddingBottom:20}}>
-                        <Text style={{textAlign: 'center', color: '#8ceded', fontSize:45}}>Chittr</Text>
-                        <Text style={{textAlign: 'center',  fontSize:25}}>Log In</Text>
+                        <Text style={{textAlign: 'center', color: '#3892ff', fontSize:45}}>Chittr</Text>
+                        <Text style={{textAlign: 'center',  fontSize:20, color:'orange'}}>Log In</Text>
                     </View>
                     <View style={{paddingBottom:20}}>
                       
