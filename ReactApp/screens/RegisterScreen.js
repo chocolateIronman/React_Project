@@ -24,7 +24,7 @@ export class RegisterScreen extends Component {
             username:''
         };
       }
-    
+    //function to save user's id and auth token to the local storage
     async saveData(obj){
         try{
             await AsyncStorage.setItem('user', JSON.stringify(obj));
@@ -33,6 +33,7 @@ export class RegisterScreen extends Component {
             console.log("Error1: "+error)
         }
     }
+    //function to extract the user's id and auth token from the local storage
     async displayData() {
         try {
           let user = await AsyncStorage.getItem('user');
@@ -42,7 +43,7 @@ export class RegisterScreen extends Component {
           console.log("Error2: "+e);
         }
       }
-
+      //function to remove the user's id and auth token
     async removeData(){
         try{
             await AsyncStorage.removeItem('user');
@@ -53,12 +54,13 @@ export class RegisterScreen extends Component {
             console.log("Error3: "+error);
         }
     }
-
+//change view depending on if user requires to log in or sign up
     toggleLogin(){
         console.log("toggle",this.state.showLogin);
         this.setState({showLogin:!this.state.showLogin});
     }
     
+    //checking if a user is logged in to show the appropriate view
     refreshUpdate = function() {
         if((global.key!=null && global.key!=undefined)){
             this.setState({showLogout:true});
@@ -78,7 +80,7 @@ export class RegisterScreen extends Component {
         }
         this.refreshUpdate();
     }
-
+    //Post request to the server for user to log out
     async logOut(){
         return fetch("http://10.0.2.2:3333/api/v0.0.5/logout",{
             method: 'POST',
@@ -100,7 +102,7 @@ export class RegisterScreen extends Component {
             console.error(error);
         })
     }
-
+    //checking if any of the fields are empty when registering a user //validation
     checkIfEmpty(){
         if(this.state.given_name==null || this.state.given_name==undefined || this.state.given_name==''){
             alert("Invalid name"); 
@@ -117,7 +119,7 @@ export class RegisterScreen extends Component {
         else{this.signUp()}
     }
     
-
+    //Post request to create a new user account
     signUp(){
         return fetch("http://10.0.2.2:3333/api/v0.0.5/user",{
             method: 'POST',
@@ -141,7 +143,7 @@ export class RegisterScreen extends Component {
         });
     }
 
-    
+    //Post request for a user to log in
     async logIn(){
         return fetch("http://10.0.2.2:3333/api/v0.0.5/login",{
             method: 'POST',

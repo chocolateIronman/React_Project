@@ -27,7 +27,7 @@ export class SearchScreen extends Component {
         }
 
     }
-
+    //Get request to search existing users
     search() {
         return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q=' + this.state.username, {
             headers: {
@@ -42,6 +42,7 @@ export class SearchScreen extends Component {
         });
     }
     
+    //getting a specific id from the result and navigating to the appropriate user's profile based on it
     getID(item){
         global.userid=item;
         this.props.navigation.jumpTo('Profile', {

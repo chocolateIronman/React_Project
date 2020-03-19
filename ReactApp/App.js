@@ -12,16 +12,11 @@ import {UserScreen} from './screens/UserScreen';
 import {PostScreen} from './screens/PostScreen';
 import { EditScreen } from './screens/EditScreen';
 
-
+//Initialising Tab and Drawer navigation
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-
-
-
-
-
-
+//Creating the Tab navigation and adding all the appropriate screens
 const TabScreen = () =>{
   return(
   <Tab.Navigator initialRouteName="Home">
@@ -33,7 +28,7 @@ const TabScreen = () =>{
   )
 }
 
-
+//Main navigation - Drawer; adding all the appropriate screens and linking the Tab navigation
 export default function Navigation(){
   return(
   <NavigationContainer initialRouteName="Home">

@@ -17,13 +17,12 @@ import {Card} from 'react-native-shadow-cards';
 import AsyncStorage from '@react-native-community/async-storage';
 import {RNCamera} from 'react-native-camera';
 
+//used hook to refresh page when focused
 function Refresh(){
     useFocusEffect(useCallback(()=>{
       console.debug("got focus");
-      //if(window.HomeScreenComponent.state.mounted) {
         console.debug("refreshing");
         window.EditScreenComponent.refreshUpdate();
-      //}
       return()=>{console.debug("lost focus");}
     },[]));
     return null;
@@ -59,7 +58,7 @@ export class EditScreen extends Component {
         });
       }
 
-
+      //Get request to get a user's info
     getUserInfo(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userID , {
            headers:{
@@ -72,7 +71,7 @@ export class EditScreen extends Component {
         });
     }
 
-
+    //Patch request to update user's account information
     patchUserInfo(){
         console.log("updating with body: ",this.state.given_name,this.state.family_name,this.state.email,this.state.password);
         console.log("updating with headers: ",this.state.requestHeaders);
@@ -97,11 +96,11 @@ export class EditScreen extends Component {
             alert("Ooops! Something went wrong!");
         });
     }
-
+    //open/close camera
     togglePhoto(){
         this.setState({togglePhoto:!this.state.togglePhoto})
       }
-
+      //function to take photo
     async takePicture(){
         if (this.camera) {
             const options = { quality: 0.5, base64: true };
@@ -117,7 +116,7 @@ export class EditScreen extends Component {
           }
       }
     }
-       
+       //Post request to save user's photo
     postUserPhoto(){
         console.log("Sending my photo: ",this.state.myPhoto.uri);
         console.log("updating with headers: ",global.key);
@@ -135,44 +134,46 @@ export class EditScreen extends Component {
                 console.error("OOOPS! "+error);
             });
     }
-      
+    //update function  
     refreshUpdate(){
-        if (global.key != null & global.key != undefined) {
+        if (global.key != null & global.key != undefined) {//checking if user is logged in
             console.debug("setting key in header",global.key);
+            //setting the appropriate headers for the http requests
             this.setState({
               requestHeaders: {
                 'Content-Type': 'application/json',
                 'X-Authorization': global.key
               }
             },() =>this.setState({ hasKey: true }));
-        }else {
+        }else {//trying to extract the auth token from local storgae
             this.displayData().then(() => {
               if (global.key != null && global.key != undefined) {
                 console.debug("setting key in header2 ",global.key);
+                //setting the appropriate headers
                 this.setState({
                   requestHeaders: {
                     'Content-Type': 'application/json',
                     'X-Authorization': global.key
                   }
                 },() =>this.setState({ hasKey: true }));
-              } else {
+              } else {//user is not logged in; showing the appropriate view
                 console.debug("can't find key");
                 this.setState({hasKey:false});
               }
             });
           }
-
+          //checking if a user's id is available for the Get user's info request
           if (global.user_id != null & global.user_id != undefined) {
             console.debug("global id: ",global.user_id);
             this.setState({userID:global.user_id},()=>this.getUserInfo())
             
-        }else {
+        }else {//trying to extract the user's id from the local storage
             this.displayData().then(() => {
               if (global.user_id != null && global.user_id != undefined) {
                 console.debug("global id2 ",global.user_id);
                 this.setState({userID:global.user_id},()=>this.getUserInfo())
 
-              } else {
+              } else {//user is not logged in
                 console.debug("can't find id");
                 this.setState({hasKey:false},()=>this.setState({userID:0}));
                 
@@ -181,7 +182,7 @@ export class EditScreen extends Component {
             });
           }
       }
-    
+    //function to extract the user's id and auth token from the local storage
       async displayData() {
         try {
           let user = await AsyncStorage.getItem('user');

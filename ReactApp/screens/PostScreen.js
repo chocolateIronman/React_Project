@@ -21,7 +21,7 @@ import {RNCamera} from 'react-native-camera';
 import Geolocation from 'react-native-geolocation-service';
 //import { CheckBox } from 'react-native-elements';
 
-
+//used hook to refresh screen when focused
 function Refresh(){
     useFocusEffect(useCallback(()=>{
       console.debug("got focus");
@@ -59,6 +59,7 @@ export class PostScreen extends Component {
       
   }
    
+  //function to take a photo
     async takePicture(){
     if (this.camera) {
         const options = { quality: 0.5, base64: true };
@@ -83,9 +84,11 @@ export class PostScreen extends Component {
     });
   }
 
+  //Post request to publish a chit
   postChit(){
-    if (this.state.myPhoto == null || this.state.myPhoto == undefined) {
-      if(this.state.chit_content!=null && this.state.chit_content!==undefined){
+    if (this.state.myPhoto == null || this.state.myPhoto == undefined) { //checking if there is no photo available
+      if(this.state.chit_content!=null && this.state.chit_content!==undefined){//checking that there is content to publish
+        //post request to publish chit without photo
       return fetch("http://10.0.2.2:3333/api/v0.0.5/chits", {
         method: 'POST',
         headers: this.state.requestHeaders,
@@ -111,7 +114,7 @@ export class PostScreen extends Component {
         alert("Cannot post empty chit!")
       }
     }
-    else {
+    else { //if photo is available > post request to post chit with photo
       return fetch("http://10.0.2.2:3333/api/v0.0.5/chits", {
         method: 'POST',
         headers: this.state.requestHeaders,
@@ -134,7 +137,7 @@ export class PostScreen extends Component {
         });
     }
 }
-
+//Post request to actually post hte photo after obtaining chit id
 postChitPhoto(){
   console.log("Sending my photo: ",this.state.myPhoto.uri)
   return fetch("http://10.0.2.2:3333/api/v0.0.5/chits/"+this.state.chit_id+"/photo",{
@@ -153,6 +156,7 @@ postChitPhoto(){
 });
 }
 
+//checking if the chit content is empty
   checkIfEmpty(){
       if(this.state.chit_content==null || this.state.chit_content==undefined){
         alert("Cannot post empty chit!")
@@ -160,14 +164,15 @@ postChitPhoto(){
         this.postChit();
       }
   }
-
+//checking if camera view should be displayed or not
   togglePhoto(){
     this.setState({togglePhoto:!this.state.togglePhoto})
   }
-
+//update function
   refreshUpdate(){
-    if (global.key !== null & global.key !== undefined) {
+    if (global.key !== null & global.key !== undefined) {//checking if a user is logged in
         console.debug("setting key in header",global.key);
+        //setting the appropriate request headers for the post chit request
         this.setState({
           requestHeaders: {
             'Content-Type': 'application/json',
@@ -175,23 +180,24 @@ postChitPhoto(){
           }
         },() =>this.setState({ hasKey: true }));
     }else {
-        this.displayData().then(() => {
+        this.displayData().then(() => {//trying to extract the user's auth token from the local storage
           if (global.key !== null && global.key !== undefined) {
             console.debug("setting key in header2 ",global.key);
+            //setting the appropriate request headers for the post chit requests
             this.setState({
               requestHeaders: {
                 'Content-Type': 'application/json',
                 'X-Authorization': global.key
               }
             },() =>this.setState({ hasKey: true }));
-          } else {
+          } else {//user is not logged in; showing the appropriate view
             console.debug("can't find key");
             this.setState({hasKey:false});
           }
         });
       }
   }
-
+//function to extract user's id and auth token from the local storage 
   async displayData() {
     try {
       let user = await AsyncStorage.getItem('user');
@@ -201,6 +207,7 @@ postChitPhoto(){
     }
   }
 
+  //finding the location coordinates if permission is granted
   findCoordinates=()=>{
     if(!this.state.locationPermission){
       this.state.locationPermission = this.requestLocationPermission();
@@ -223,6 +230,7 @@ postChitPhoto(){
     );
   }
 
+  //asking user to give permission and enable location
   async requestLocationPermission() {
     try{
       const granted = await PermissionsAndroid.request(
@@ -246,7 +254,7 @@ postChitPhoto(){
       console.warn(err);
     }
   }
-
+//checking if user has chosen to share location
   checked(){
     if(this.state.checked==true){
       this.setState({checked:false})
@@ -256,6 +264,7 @@ postChitPhoto(){
     }
   }
 
+  //saving user's chit to local storage instead of publishig it
 async saveChit(){
   const chit=this.state.chit_content;
   AsyncStorage.getItem('savedChits', (err, result) => {
@@ -273,6 +282,7 @@ async saveChit(){
 });
 }
 
+//retrieving user's saved chits
 async displayChits(){
   AsyncStorage.getItem('savedChits', (err, result) => {
     console.log(result);
@@ -283,6 +293,7 @@ async displayChits(){
   });
 }
 
+//removing a chit from the local storage
 async removeChits(){
   try{
       await AsyncStorage.removeItem('savedChits');

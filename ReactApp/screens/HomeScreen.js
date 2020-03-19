@@ -14,6 +14,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Card} from 'react-native-shadow-cards';
 import AsyncStorage from '@react-native-community/async-storage';
 
+//used hook to refresh screen when focused
 function Refresh(){
   useFocusEffect(useCallback(()=>{
     console.debug("got focus");
@@ -28,7 +29,7 @@ export class HomeScreen extends Component {
     super(props);
     window.HomeScreenComponent=this;
     this.state = {
-      isLoading: true,
+      isLoading: true, 
       chitsListData: [],
       requestHeaders: {
         'Content-Type': 'application/json'
@@ -40,6 +41,7 @@ export class HomeScreen extends Component {
 
   }
 
+  //Get request to the server to get all the chits dependent on the requested headers
   getData() {
     return fetch('http://10.0.2.2:3333/api/v0.0.5/chits', { 
       headers: this.state.requestHeaders 
@@ -57,9 +59,11 @@ export class HomeScreen extends Component {
     });
   }
 
+  //update function
   refreshUpdate = function () {
-    if (global.key != null & global.key != undefined) {
+    if (global.key != null & global.key != undefined) { //checking if user is logged in
       console.debug("setting key in header",global.key);
+      //setting the appropriate headers for the Get request
       this.setState({
         requestHeaders: {
           'Content-Type': 'application/json',
@@ -68,17 +72,18 @@ export class HomeScreen extends Component {
       },() =>this.getData().then(
         this.setState({ isLoading: false })
       ));
-    } else {
+    } else { //trying to extract the token from the local storage
       this.getToken().then(() => {
         if (global.key != null && global.key != undefined) {
           console.debug("setting key in header2 ",global.key);
+          //setting the appropriate headers
           this.setState({
             requestHeaders: {
               'Content-Type': 'application/json',
               'X-Authorization': global.key
             }
           });
-        } else {
+        } else { // if user is not logged in request headers don't contain the authorization token
           console.debug("can't find key");
           this.setState({
             requestHeaders: {
@@ -86,7 +91,7 @@ export class HomeScreen extends Component {
             }
           });
         }
-        this.getData();
+        this.getData(); //calling the getData function
       });
     }
   }
@@ -98,7 +103,7 @@ export class HomeScreen extends Component {
     });
   }
 
-  async getToken() {
+  async getToken() { //async function to extract the authorization token from the local storage
     try {
       let token = await AsyncStorage.getItem('access_token');
       global.key = token;
@@ -108,7 +113,7 @@ export class HomeScreen extends Component {
     }
   }
 
-  showLocation(loc){
+  showLocation(loc){ //show user's tagged location if available
     if(loc!=null&&loc!=undefined){
       alert("Location: "+JSON.stringify(loc))
     }else{

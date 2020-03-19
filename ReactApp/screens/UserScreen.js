@@ -16,7 +16,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Card} from 'react-native-shadow-cards';
 import AsyncStorage from '@react-native-community/async-storage';
 
-
+//used hook to refresh screen when focused
 function Refresh(){
     useFocusEffect(useCallback(()=>{
       console.debug("got focus");
@@ -48,14 +48,15 @@ export class UserScreen extends Component {
         }
        
     }
-    
+    //update function
     refreshUpdate = function () {
-        if(this.props.route.params!==undefined&& this.props.route.params!==null){
+        if(this.props.route.params!==undefined&& this.props.route.params!==null){//if the route parameters exist
             console.log("Props:"+this.props.route.params.userid);
-            if(this.props.route.params.userid==0){
+            if(this.props.route.params.userid==0){ //check if the route param is 0 (the user is navigating from the Drawer navigation)
                 
-                if (global.key != null & global.key != undefined ) {
+                if (global.key != null & global.key != undefined ) { //checking if a user is logged in
                     console.debug("got key: ",global.key);
+                    //setting the appropriate headers for the http requests
                     this.setState({
                       requestHeaders: {
                         'Content-Type': 'application/json',
@@ -63,16 +64,17 @@ export class UserScreen extends Component {
                       }
                     },() =>this.setState({ hasKey: true }),()=>this.setState({userID:global.key}));
                 }else {
-                    this.displayData().then(() => {
+                    this.displayData().then(() => { //trying to extract the auth token from the local storage
                       if (global.key != null && global.key != undefined) {
                         console.debug("got key2 ",global.key);
+                        //setting the appropriate headers for the http requests
                         this.setState({
                           requestHeaders: {
                             'Content-Type': 'application/json',
                             'X-Authorization': global.key
                           }
                         },() =>this.setState({ hasKey: true },()=>this.setState({userID:global.key})));
-                      } else {
+                      } else { //if user is not logged in redirect to the Login/Logout page
                        
                         console.debug("can't find key");
                         this.setState({hasKey:false},()=>this.setState({userID:0},()=>this.props.navigation.navigate('Login/Logout')));
@@ -80,17 +82,17 @@ export class UserScreen extends Component {
                       }
                     });
                   }
-                  if (global.user_id != null & global.user_id != undefined) {
+                  if (global.user_id != null & global.user_id != undefined) { //checking if the user id is available
                     console.debug("global id: ",global.user_id);
                     this.setState({userID:global.user_id},()=>this.myFunctions())
                     
-                }else {
+                }else {//trying to extract the user id from the local storage
                     this.displayData().then(() => {
                       if (global.user_id != null && global.user_id != undefined) {
                         console.debug("global id2 ",global.user_id);
                         this.setState({userID:global.user_id},()=>this.myFunctions())
         
-                      } else {
+                      } else { //if user's id is not found redirect to the Login/Logout page
                         console.debug("can't find id");
                         this.setState({hasKey:false},()=>this.setState({userID:0},()=>this.props.navigation.navigate('Login/Logout')));
                         
@@ -99,11 +101,11 @@ export class UserScreen extends Component {
                     });
                   }
             }
-            else{
+            else{ //if user id exists do myFunctions
                 
                 this.setState({userID:this.props.route.params.userid},() =>this.myFunctions());
             }  
-         }
+         } //if user is not logged in navigate to Login/Logout page
           else{
             this.props.navigation.navigate('Login/Logout');
          } 
@@ -121,28 +123,31 @@ export class UserScreen extends Component {
         
     } 
 
-
+//function combining all functions needed for getting all the appropriate data
     myFunctions() {
         this.getUserInfo().then( this.getFollowers()).then(this.getFollowing()).then(this.props.route.params.userid=0)
   
     }
-
+    //show user's chits
     toggleTweets() {
         this.setState({showTweets:true});
         this.setState({showFollowing:false})
         this.setState({showFollowers:false});
     }
+    //show user's followers
     toggleFollowers() {
         this.setState({showTweets:false})
         this.setState({showFollowing:false})
         this.setState({showFollowers:true});
     }
+    //show the people the user's following
     toggleFollowing() {
         this.setState({showTweets:false})
         this.setState({showFollowing:true})
         this.setState({showFollowers:false});
     }
     
+    //Get request to get all the information about a user
     getUserInfo(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userID , {
             headers: {
@@ -156,6 +161,7 @@ export class UserScreen extends Component {
         });
     }
 
+    //Get request to get the followers of the user
     getFollowers(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userID+'/followers',{
             headers: {
@@ -168,6 +174,7 @@ export class UserScreen extends Component {
             console.log(error);
         });
     }
+    //Get request to get the people the user's following
     getFollowing(){
         return fetch('http://10.0.2.2:3333/api/v0.0.5/user/'+this.state.userID+'/following',{
             headers: {
@@ -179,13 +186,14 @@ export class UserScreen extends Component {
             console.log(error);
         });
     }
-
+    //estracting the user's id from the user's information
     getID(item){
         global.userid=item;
         this.setState({userID:item},()=> this.myFunctions())
             
     }
     
+    //Post request to follow a user
     follow(){
         console.log(this.state.userID);
         console.log("following with request headers: ",this.state.requestHeaders)
@@ -195,7 +203,7 @@ export class UserScreen extends Component {
     })
     .then((response)=>{
         console.debug(response);
-        this.setState({buttonText:'Unfollow'})
+        this.setState({buttonText:'Unfollow'}) //changing the text of the button
         alert("User followed!");
     })
     .catch((error)=>{
@@ -204,6 +212,7 @@ export class UserScreen extends Component {
     });
     }
 
+    //checking if a user is followed/not followed/checking their own profile to display the correct button and functionality
     checkIfFollowed(){
         if(global.user_id!==null&&global.user_id!==undefined){
             console.debug("followers",this.state.followers);
@@ -225,7 +234,7 @@ export class UserScreen extends Component {
         }
         
     }
-
+    //Post request to unfollow a user
     unfollow(){
         console.log(this.state.userID);
         return fetch("http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.userID+"/follow",{
@@ -245,7 +254,7 @@ export class UserScreen extends Component {
     }
 
   
-
+    //extracting the user's id and token from the local storage
       async displayData() {
         try {
           let user = await AsyncStorage.getItem('user');
@@ -255,13 +264,14 @@ export class UserScreen extends Component {
           console.log("Error2: "+e);
         }
       }
-
+    
+    //changing the view depending on which button is pressed
     toggleFollow(){
         if(this.state.buttonText=='Follow'){
             if(this.state.hasKey==true){
                this.setState({buttonText:'Unfollow'},()=>this.follow())
             }
-            else{
+            else{ //if user is not logged in
                 alert("Cannot follow users unless logged in!" )
             }
         }
