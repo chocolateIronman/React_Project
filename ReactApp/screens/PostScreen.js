@@ -279,7 +279,6 @@ async displayChits(){
     this.setState({chitData:result})
     console.log(this.state.chitData)
     global.chits=result;
-    console.log(global.chits)
   });
 }
 
@@ -323,9 +322,6 @@ async removeChits(){
                 <View style={{margin:10}}>
                     <Button title="Save Chit" onPress = { () => this.saveChit() }></Button>
                 </View>
-                
-
-
 
             </View>
         );
